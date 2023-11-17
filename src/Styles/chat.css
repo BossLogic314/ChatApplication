@@ -1,0 +1,20 @@
+.chat {
+    height: 30px;
+    width: 100%;
+
+    font-size: 17px;
+
+    display: flex;
+    flex-direction: row;
+
+    border: 2px solid yellow;
+}
+
+.chat:hover {
+    cursor: pointer;
+    background-color: rgb(237, 231, 231);
+}
+
+.numberOfUnreadMessages {
+    color: rgb(245, 120, 120);
+}

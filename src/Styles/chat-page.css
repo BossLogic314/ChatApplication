@@ -1,0 +1,63 @@
+.chat-page {
+    height: 700px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    /*border: 2px solid blue;*/
+}
+
+.nav-bar {
+    height: 8%;
+
+    display: flex;
+    flex-direction: row;
+
+    border: 2px solid black;
+}
+
+.logo {
+    width: 100px;
+    height: 100%;
+
+    margin-left: 10px;
+
+    border: 2px solid red;
+}
+
+.logout-button-box {
+    width: 100px;
+    height: 100%;
+
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    margin-left: auto;
+    margin-right: 10px;
+
+    justify-content: center;
+}
+
+.logout-button {
+    font-size: 20px;
+
+    height: fit-content;
+    width: fit-content;
+
+    background-color: transparent;
+}
+
+.logout-button:hover {
+    cursor: pointer;
+    transform: scale(1.25);
+}
+
+.body {
+    height: 91%;
+
+    display: flex;
+    flex-direction: row;
+}
