@@ -1,0 +1,30 @@
+package com.chat.app.repository;
+
+import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.query.Query;
+
+import com.chat.app.model.Message;
+
+public interface MessageRepository extends Neo4jRepository<Message, String> {
+
+	@Query("MATCH (m : Message) WHERE ((m.from = $0 AND m.to = $1 AND m.readList[0] = 'true') OR " +
+			"(m.from = $1 AND m.to = $0 AND m.readList[1] = 'true')) AND m.groupName = '' " +
+			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
+	public Iterable<Message> getReadMessagesFromUser(String user, String chat);
+	
+	@Query("MATCH (m : Message) WHERE ((m.from = $0 AND m.to = $1 AND m.readList[0] = 'false') OR " +
+			"(m.from = $1 AND m.to = $0 AND m.readList[1] = 'false')) AND m.groupName = '' " +
+			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
+	public Iterable<Message> getUnreadMessagesFromUser(String user, String chat);
+	
+	@Query("CREATE (message : Message{from: $0, to: $1, message: $2, groupName: '', " +
+			"readList: ['true', 'false'], date: $3, month: $4, year: $5, hours: $6, " +
+			"minutes: $7, seconds: $8})")
+	public void postMessage(String from, String chat, String message, int dateNumber, int month, int year, int hours, int minutes, int seconds);
+	
+	@Query("MATCH (m : Message) WHERE (m.from = $1 AND m.to = $0) SET m.readList = ['true', 'true']")
+	public void turnAllMessagesIntoReadFromChat(String user, String chat);
+	
+	@Query("MATCH (m : Message) WHERE (m.from = $1 AND m.to = $0 AND m.readList[1] = 'false') RETURN COUNT(*)")
+	public Integer getNumberOfUnreadMessages(String user, String chat);
+}
