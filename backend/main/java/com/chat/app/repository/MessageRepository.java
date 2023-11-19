@@ -12,6 +12,10 @@ public interface MessageRepository extends Neo4jRepository<Message, String> {
 			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
 	public Iterable<Message> getReadMessagesFromUser(String user, String chat);
 	
+	@Query("MATCH(m : Message) WHERE m.to = $1 AND m.readList[$0] = 'true' " +
+			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
+	public Iterable<Message> getReadMessagesFromGroupChat(Integer userIndex, String chat);
+	
 	@Query("MATCH (m : Message) WHERE ((m.from = $0 AND m.to = $1 AND m.readList[0] = 'false') OR " +
 			"(m.from = $1 AND m.to = $0 AND m.readList[1] = 'false')) AND m.groupName = '' " +
 			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")

@@ -10,48 +10,46 @@ import org.springframework.stereotype.Service;
 
 import com.chat.app.model.Message;
 import com.chat.app.repository.MessageRepository;
+import com.chat.app.repository.UserRepository;
 
 @Service
 public class MessageServiceImpl implements MessageService {
 
 	@Autowired
+	private UserService userService;
+	
+	@Autowired
 	private MessageRepository messageRepository;
-
-	/*private Integer getDesiredUserIndex(String user, String chat) {
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	public Boolean isGroupChat(String chat) {
 		
-		boolean isGroupChat = messageRepository.isGroupChat(chat) == null ? false : true;
+		// The list should ideally contain only one element
+		ArrayList<Boolean> list = (ArrayList<Boolean>) userRepository.isGroupChat(chat);
 		
-		ArrayList<ListValue> listOfReadList;
-		
-		// If not a user chat
-		if (messageRepository.isGroupChat(chat) == null)
-			listOfReadList = messageRepository.getReadListFromUser(user1, user2);
-		
-		// There are no read messages to be returned
-		if (listOfReadList.size() == 0)
-			return -1;
-		
-		ListValue readList = messageRepository.getReadList(user1, user2).get(0);
-		
-		int len = readList.size();
-		
-		// Looping in the list to find the desired user
-		for (int i = 0; i < len; i+=2) {
-			
-			StringValue userStringValue = (StringValue)readList.get(i);
-			String userString = userStringValue.asString("");
-			
-			if (userString.compareTo(desiredUser) == 0)
-				return i;
+		// Looping anyway
+		for (Boolean element : list) {
+			if (element)
+				return true;
 		}
 		
-		// Control must never reach here
-		return null;
-	}*/
+		return false;
+	}
 
 	@Override
 	public Iterable<Message> getReadMessagesFromChat(String user, String chat) {
-		return messageRepository.getReadMessagesFromUser(user, chat);
+		
+		// If not a group chat
+		if (!isGroupChat(chat))
+			return messageRepository.getReadMessagesFromUser(user, chat);
+		
+		// If a group chat
+		System.out.println("Here!");
+		Integer userIndex = userService.getGroupChatParticipantIndex(user, chat);
+		System.out.println("There!");
+		return messageRepository.getReadMessagesFromGroupChat(userIndex, chat);
 	}
 
 	@Override

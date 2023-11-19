@@ -30,9 +30,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Iterable<String> getGroupChatParticipants(String name) {
-		ArrayList<ListValue> a = userRepository.getGroupChatParticipants(name);
-		ListValue participants = a.get(0);
+	public Iterable<String> getGroupChatParticipants(String chat) {
+		ArrayList<ListValue> participantsList = userRepository.getGroupChatParticipants(chat);
+		ListValue participants = participantsList.get(0);
 		int len = participants.size();
 		
 		ArrayList<String> participantsStr = new ArrayList<>();
@@ -43,5 +43,25 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return participantsStr;
+	}
+	
+	@Override
+	public Integer getGroupChatParticipantIndex(String user, String chat) {
+		ArrayList<String> participants = (ArrayList<String>) getGroupChatParticipants(user);
+		
+		// Index of the user
+		int index = 0;
+		
+		// Iterating through the group chat's participants to find the user's index
+		for (String participant : participants) {
+			
+			if (participant.compareTo(user) == 0)
+				return index;
+			
+			index++;
+		}
+		
+		// If the user is not a participant of the group chat
+		return null;
 	}
 }

@@ -10,6 +10,12 @@ import com.chat.app.model.User;
 
 public interface UserRepository extends Neo4jRepository<User, String> {
 
+	@Query("MATCH(gc: GroupChat) WHERE gc.name = $0 RETURN TRUE")
+	public Iterable<Boolean> isGroupChat(String chat);
+	
+	@Query("MATCH(gc: GroupChat) WHERE gc.name = $0 RETURN gc.numberOfParticipants")
+	public Iterable<Integer> getNumberOfParticipantsInGroupChat(String chat);
+	
 	@Query("MATCH(u: User) WHERE NOT (u.username = $0) AND LEFT(u.username, SIZE($1)) = $1 RETURN u.username")
 	public Iterable<String> getAllOtherUsers(String username, String searchString);
 	
