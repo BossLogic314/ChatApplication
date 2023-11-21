@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Integer getGroupChatParticipantIndex(String user, String chat) {
-		ArrayList<String> participants = (ArrayList<String>) getGroupChatParticipants(user);
+		ArrayList<String> participants = (ArrayList<String>) getGroupChatParticipants(chat);
 		
 		// Index of the user
 		int index = 0;

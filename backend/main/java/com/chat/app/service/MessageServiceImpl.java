@@ -46,9 +46,7 @@ public class MessageServiceImpl implements MessageService {
 			return messageRepository.getReadMessagesFromUser(user, chat);
 		
 		// If a group chat
-		System.out.println("Here!");
 		Integer userIndex = userService.getGroupChatParticipantIndex(user, chat);
-		System.out.println("There!");
 		return messageRepository.getReadMessagesFromGroupChat(userIndex, chat);
 	}
 
