@@ -52,7 +52,14 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public Iterable<Message> getUnreadMessagesFromChat(String user, String chat) {
-		return messageRepository.getUnreadMessagesFromUser(user, chat);
+		
+		// If not a group chat
+		if (!isGroupChat(chat))
+			return messageRepository.getUnreadMessagesFromUser(user, chat);
+		
+		// If a group chat
+		Integer userIndex = userService.getGroupChatParticipantIndex(user, chat);
+		return messageRepository.getUnreadMessagesFromGroupChat(userIndex, chat);
 	}
 
 	@Override

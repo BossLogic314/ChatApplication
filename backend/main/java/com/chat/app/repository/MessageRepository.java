@@ -12,7 +12,7 @@ public interface MessageRepository extends Neo4jRepository<Message, String> {
 			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
 	public Iterable<Message> getReadMessagesFromUser(String user, String chat);
 	
-	@Query("MATCH(m : Message) WHERE m.to = $1 AND m.readList[$0] = 'true' " +
+	@Query("MATCH(m : Message) WHERE m.to = $1 AND m.groupName = $1 AND m.readList[$0] = 'true' " +
 			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
 	public Iterable<Message> getReadMessagesFromGroupChat(Integer userIndex, String chat);
 	
@@ -20,6 +20,10 @@ public interface MessageRepository extends Neo4jRepository<Message, String> {
 			"(m.from = $1 AND m.to = $0 AND m.readList[1] = 'false')) AND m.groupName = '' " +
 			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
 	public Iterable<Message> getUnreadMessagesFromUser(String user, String chat);
+	
+	@Query("MATCH(m : Message) WHERE m.to = $1 AND m.groupName = $1 AND m.readList[$0] = 'false' " +
+			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
+	public Iterable<Message> getUnreadMessagesFromGroupChat(Integer userIndex, String chat);
 	
 	@Query("CREATE (message : Message{from: $0, to: $1, message: $2, groupName: '', " +
 			"readList: $3, date: $4, month: $5, year: $6, hours: $7, " +
