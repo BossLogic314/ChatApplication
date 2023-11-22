@@ -73,6 +73,7 @@ public class MessageServiceImpl implements MessageService {
 				userService.getNumberOfParticipantsInGroupChat(chat) : 2;
 		
 		String readList[] = new String[numberOfParticipants];
+		String groupName = "";
 		
 		if (!isGroupChat) {
 			readList[0] = "true";
@@ -90,8 +91,10 @@ public class MessageServiceImpl implements MessageService {
 				
 				readList[i] = "false";
 			}
+			
+			groupName = chat;
 		}
-		messageRepository.postMessage(from, chat, message, readList,
+		messageRepository.postMessage(from, chat, message, groupName, readList,
 				date.getDate(), date.getMonth(), date.getYear(),
 				date.getHours(), date.getMinutes(), date.getSeconds());
 		

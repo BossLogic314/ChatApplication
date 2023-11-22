@@ -25,10 +25,10 @@ public interface MessageRepository extends Neo4jRepository<Message, String> {
 			"RETURN m ORDER BY m.year, m.month, m.date, m.hours, m.minutes, m.seconds")
 	public Iterable<Message> getUnreadMessagesFromGroupChat(Integer userIndex, String chat);
 	
-	@Query("CREATE (message : Message{from: $0, to: $1, message: $2, groupName: '', " +
-			"readList: $3, date: $4, month: $5, year: $6, hours: $7, " +
-			"minutes: $8, seconds: $9})")
-	public void postMessage(String from, String chat, String message, String[] readList,
+	@Query("CREATE (message : Message{from: $0, to: $1, message: $2, groupName: $3, " +
+			"readList: $4, date: $5, month: $6, year: $7, hours: $8, " +
+			"minutes: $9, seconds: $10})")
+	public void postMessage(String from, String chat, String message, String groupName, String[] readList,
 			int dateNumber, int month, int year, int hours, int minutes, int seconds);
 	
 	@Query("MATCH (m : Message) WHERE (m.from = $1 AND m.to = $0) SET m.readList = ['true', 'true']")
