@@ -38,6 +38,16 @@ public class UserController {
 		return userService.getAllChats(username, searchString, includeGroupChats);
 	}
 	
+	@GetMapping("/get-all-group-chats")
+	public Iterable<String> getAllGroupChats(HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
+		return userService.getAllGroupChats();
+	}
+	
 	@GetMapping("/create-group-chat")
 	public Boolean createGroupChat(String name, Iterable<String> participants, HttpServletRequest request) {
 		

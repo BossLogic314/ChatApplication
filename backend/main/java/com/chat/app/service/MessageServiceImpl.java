@@ -61,8 +61,32 @@ public class MessageServiceImpl implements MessageService {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Date date = new Date();
 		
-		messageRepository.postMessage(from, chat, message, date.getDate(), date.getMonth(),
-				date.getYear(), date.getHours(), date.getMinutes(), date.getSeconds());
+		Boolean isGroupChat = isGroupChat(chat);
+		int numberOfParticipants = isGroupChat ?
+				userService.getNumberOfParticipantsInGroupChat(chat) : 2;
+		
+		String readList[] = new String[numberOfParticipants];
+		
+		if (!isGroupChat) {
+			readList[0] = "true";
+			readList[1] = "true";
+		}
+		else {
+			int groupChatParticipantIndex = userService.getGroupChatParticipantIndex(from, chat);
+			
+			for (int i = 0; i < numberOfParticipants; ++i) {
+				
+				if (i == groupChatParticipantIndex) {
+					readList[i] = "true";
+					continue;
+				}
+				
+				readList[i] = "false";
+			}
+		}
+		messageRepository.postMessage(from, chat, message, readList,
+				date.getDate(), date.getMonth(), date.getYear(),
+				date.getHours(), date.getMinutes(), date.getSeconds());
 		
 		return true;
 	}

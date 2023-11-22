@@ -13,6 +13,9 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 	@Query("MATCH(gc: GroupChat) WHERE gc.name = $0 RETURN TRUE")
 	public Iterable<Boolean> isGroupChat(String chat);
 	
+	@Query("MATCH(gc: GroupChat) return gc.name")
+	public Iterable<String> getAllGroupChats();
+	
 	@Query("MATCH(gc: GroupChat) WHERE gc.name = $0 RETURN gc.numberOfParticipants")
 	public Iterable<Integer> getNumberOfParticipantsInGroupChat(String chat);
 	

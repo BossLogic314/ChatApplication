@@ -25,8 +25,22 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public Iterable<String> getAllGroupChats() {
+		return userRepository.getAllGroupChats();
+	}
+	
+	@Override
 	public void createGroupChat(String name, Iterable<String> participants) {
 		userRepository.createGroupChat(name, participants);
+	}
+	
+	@Override
+	public Integer getNumberOfParticipantsInGroupChat(String name) {
+		// This list must contain only one element
+		ArrayList<Integer> numberOfParticipantsList =
+				(ArrayList<Integer>) userRepository.getNumberOfParticipantsInGroupChat(name);
+		
+		return numberOfParticipantsList.get(0);
 	}
 	
 	@Override

@@ -22,9 +22,10 @@ public interface MessageRepository extends Neo4jRepository<Message, String> {
 	public Iterable<Message> getUnreadMessagesFromUser(String user, String chat);
 	
 	@Query("CREATE (message : Message{from: $0, to: $1, message: $2, groupName: '', " +
-			"readList: ['true', 'false'], date: $3, month: $4, year: $5, hours: $6, " +
-			"minutes: $7, seconds: $8})")
-	public void postMessage(String from, String chat, String message, int dateNumber, int month, int year, int hours, int minutes, int seconds);
+			"readList: $3, date: $4, month: $5, year: $6, hours: $7, " +
+			"minutes: $8, seconds: $9})")
+	public void postMessage(String from, String chat, String message, String[] readList,
+			int dateNumber, int month, int year, int hours, int minutes, int seconds);
 	
 	@Query("MATCH (m : Message) WHERE (m.from = $1 AND m.to = $0) SET m.readList = ['true', 'true']")
 	public void turnAllMessagesIntoReadFromChat(String user, String chat);
