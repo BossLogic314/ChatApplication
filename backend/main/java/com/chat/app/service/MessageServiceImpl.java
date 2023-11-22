@@ -103,7 +103,13 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public Boolean turnAllMessagesForUserIntoReadFromChat(String user, String chat) {
-		messageRepository.turnAllMessagesIntoReadFromChat(user, chat);
+		
+		if (!isGroupChat(chat))
+			messageRepository.turnAllMessagesIntoReadFromUser(user, chat);
+		else {
+			Integer groupChatParticipantIndex = userService.getGroupChatParticipantIndex(user, chat);
+			messageRepository.turnAllMessagesIntoReadFromGroupChat(groupChatParticipantIndex, chat);
+		}
 		return true;
 	}
 

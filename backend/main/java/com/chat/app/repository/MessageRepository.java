@@ -32,7 +32,10 @@ public interface MessageRepository extends Neo4jRepository<Message, String> {
 			int dateNumber, int month, int year, int hours, int minutes, int seconds);
 	
 	@Query("MATCH (m : Message) WHERE (m.from = $1 AND m.to = $0) SET m.readList = ['true', 'true']")
-	public void turnAllMessagesIntoReadFromChat(String user, String chat);
+	public void turnAllMessagesIntoReadFromUser(String user, String chat);
+	
+	@Query("MATCH (m : Message) WHERE (m.groupName = $1 AND m.to = $1) SET m.readList = m.readList[0..$0] + 'true' + m.readList[$0+1..]")
+	public void turnAllMessagesIntoReadFromGroupChat(Integer userIndex, String chat);
 	
 	@Query("MATCH (m : Message) WHERE (m.from = $1 AND m.to = $0 AND m.readList[1] = 'false') RETURN COUNT(*)")
 	public Integer getNumberOfUnreadMessages(String user, String chat);
