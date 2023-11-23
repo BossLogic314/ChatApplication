@@ -101,12 +101,11 @@ export default class ChatPage extends React.Component {
 
         console.log(`Got message from ${from}`);
 
+        this.updateNumberOfUnreadMessagesFromChat(from);
+        
         // If a message is received from the current chat
         if (from == this.state.currentChat) {
             this.chatClicked(this.state.currentChat);
-        }
-        else {
-            this.updateNumberOfUnreadMessagesFromChat(from);
         }
     }
 
