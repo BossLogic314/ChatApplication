@@ -97,14 +97,26 @@ export default class ChatPage extends React.Component {
 
     handleMessage(message) {
 
-        const from = message.headers.from;
+        const fromUser = message.headers.fromUser;
+        const toChat = message.headers.toChat;
 
-        console.log(`Got message from ${from}`);
+        console.log(`Got message from ${fromUser} to ${toChat}`);
 
-        this.updateNumberOfUnreadMessagesFromChat(from);
+        // If the current user himself sent the message (As he is a subscriber too)
+        if (fromUser == this.state.currentUser) {
+            return;
+        }
+
+        // If the message is sent to a group chat
+        if (toChat != this.state.currentUser) {
+            this.updateNumberOfUnreadMessagesFromChat(toChat);
+        }
+        else {
+            this.updateNumberOfUnreadMessagesFromChat(fromUser);
+        }
 
         // If a message is received from the current chat
-        if (from == this.state.currentChat) {
+        if (toChat == this.state.currentChat) {
             this.chatClicked(this.state.currentChat, false);
         }
     }
@@ -164,7 +176,6 @@ export default class ChatPage extends React.Component {
     chatClicked(chat, markMessagesOfPreviousChatAsRead) {
 
         if (markMessagesOfPreviousChatAsRead) {
-            console.log(`Here. Marked as read messages in chat ${this.state.currentChat}`);
             // Before displaying the new messages, make sure the messages of the previous chat are marked read
             this.turnAllMessagesIntoRead(this.state.currentUser, this.state.currentChat);
         }
@@ -206,7 +217,7 @@ export default class ChatPage extends React.Component {
 
         this.stompClient.publish({
             destination: `/topic/${this.state.currentChat}`,
-            headers: {from: `${this.state.currentUser}`},
+            headers: {fromUser: `${this.state.currentUser}`, toChat: `${this.state.currentChat}`},
         });
 
         // Calling this method to re-render all the messages between the users
