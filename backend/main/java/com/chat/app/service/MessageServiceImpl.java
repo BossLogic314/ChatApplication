@@ -77,7 +77,7 @@ public class MessageServiceImpl implements MessageService {
 		
 		if (!isGroupChat) {
 			readList[0] = "true";
-			readList[1] = "true";
+			readList[1] = "false";
 		}
 		else {
 			int groupChatParticipantIndex = userService.getGroupChatParticipantIndex(from, chat);
