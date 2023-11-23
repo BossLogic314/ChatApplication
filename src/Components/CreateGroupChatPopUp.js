@@ -98,6 +98,7 @@ export default class CreateGroupChatPopUp extends React.Component {
     }
 
     createButtonClicked() {
+        
     }
 
     closeGroupChatPopUp(event) {
@@ -160,7 +161,9 @@ export default class CreateGroupChatPopUp extends React.Component {
                         { addedParticipants }
                     </div>
 
-                    <button className='create-group-chat-submit-button'>Create</button>
+                    <button className='create-group-chat-submit-button' onClick={ this.createButtonClicked }>
+                        Create
+                    </button>
                     <div className='participants-number-message'>
                         *Atmost 5 people can be a part of a group chat
                     </div>

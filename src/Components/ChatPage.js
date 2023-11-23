@@ -23,6 +23,7 @@ export default class ChatPage extends React.Component {
         }
 
         this.getCurrentUser = this.getCurrentUser.bind(this);
+        this.getAllGroupChats = this.getAllGroupChats.bind(this);
         this.chatClicked = this.chatClicked.bind(this);
         this.sendButtonClicked = this.sendButtonClicked.bind(this);
         this.searchChats = this.searchChats.bind(this);
@@ -100,12 +101,18 @@ export default class ChatPage extends React.Component {
 
         console.log(`Got message from ${from}`);
 
-        this.updateNumberOfUnreadMessagesFromChat(from);
-
         // If a message is received from the current chat
         if (from == this.state.currentChat) {
             this.chatClicked(this.state.currentChat);
         }
+        else {
+            this.updateNumberOfUnreadMessagesFromChat(from);
+        }
+    }
+
+    getAllGroupChats() {
+        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-all-group-chats', [], true, true);
+        return result;
     }
 
     // Register to a STOMP endpoint and subscribe to a destination path
@@ -116,14 +123,24 @@ export default class ChatPage extends React.Component {
             brokerURL: 'ws://localhost:8080/chat'
         });
 
+        const groupChats = this.getAllGroupChats();
+        const groupChatsLen = groupChats.length;
+
         this.stompClient.onConnect = (frame) => {
+
+            // Subscribing to get messages from private chats
             this.stompClient.subscribe(`/topic/${this.state.currentUser}`, this.handleMessage);
+
+            // Subscribing to get messages from group chats
+            for (var i = 0; i < groupChatsLen; ++i) {
+                this.stompClient.subscribe(`/topic/${groupChats[i]}`, this.handleMessage);
+            }
         };
         this.stompClient.activate();
     }
 
     turnAllMessagesIntoRead(user, chat) {
-
+        
         // When no chat is opened by the current user
         if (chat == null) {
             return;
@@ -145,14 +162,14 @@ export default class ChatPage extends React.Component {
     }
 
     // When a chat is clicked, display all the messages (read and unread)
-    chatClicked(username) {
+    chatClicked(chat) {
 
         // Before displaying the new messages, make sure the messages of the previous chat are marked read
         this.turnAllMessagesIntoRead(this.state.currentUser, this.state.currentChat);
 
         const args = [
             { 'key': 'user', 'value': this.state.currentUser },
-            { 'key': 'chat', 'value': username },
+            { 'key': 'chat', 'value': chat },
         ];
 
         const readMessages = Request.makeXhrRequest('GET', 'http://localhost:8080/get-read-messages', args, true, true);
@@ -164,7 +181,7 @@ export default class ChatPage extends React.Component {
         }
         // If the else block is absent, it might get executed sometimes when React takes some time to re-render
         else {
-            this.setState({ readMessages: readMessages, unreadMessages: unreadMessages, currentChat: username });
+            this.setState({ readMessages: readMessages, unreadMessages: unreadMessages, currentChat: chat });
         }
     }
 
@@ -176,9 +193,6 @@ export default class ChatPage extends React.Component {
         if (message == '') {
             return;
         }
-
-        // Before a message is sent, marking all the messages in the current chat as 'read'
-        this.turnAllMessagesIntoRead(this.state.currentUser, this.state.currentChat);
 
         const args = [
             { 'key': 'from', 'value': this.state.currentUser },
