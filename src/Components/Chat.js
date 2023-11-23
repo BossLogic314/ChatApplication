@@ -11,7 +11,7 @@ export default class Chat extends React.Component {
     }
 
     chatClicked() {
-        this.props.chatClicked(this.props.username);
+        this.props.chatClicked(this.props.username, true);
     }
 
     render() {

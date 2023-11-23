@@ -102,10 +102,10 @@ export default class ChatPage extends React.Component {
         console.log(`Got message from ${from}`);
 
         this.updateNumberOfUnreadMessagesFromChat(from);
-        
+
         // If a message is received from the current chat
         if (from == this.state.currentChat) {
-            this.chatClicked(this.state.currentChat);
+            this.chatClicked(this.state.currentChat, false);
         }
     }
 
@@ -161,10 +161,13 @@ export default class ChatPage extends React.Component {
     }
 
     // When a chat is clicked, display all the messages (read and unread)
-    chatClicked(chat) {
+    chatClicked(chat, markMessagesOfPreviousChatAsRead) {
 
-        // Before displaying the new messages, make sure the messages of the previous chat are marked read
-        this.turnAllMessagesIntoRead(this.state.currentUser, this.state.currentChat);
+        if (markMessagesOfPreviousChatAsRead) {
+            console.log(`Here. Marked as read messages in chat ${this.state.currentChat}`);
+            // Before displaying the new messages, make sure the messages of the previous chat are marked read
+            this.turnAllMessagesIntoRead(this.state.currentUser, this.state.currentChat);
+        }
 
         const args = [
             { 'key': 'user', 'value': this.state.currentUser },
@@ -207,7 +210,7 @@ export default class ChatPage extends React.Component {
         });
 
         // Calling this method to re-render all the messages between the users
-        this.chatClicked( this.state.currentChat );
+        this.chatClicked( this.state.currentChat, false );
     }
 
     getNumberOfUnreadMessagesFromEachChat(user, chats) {
