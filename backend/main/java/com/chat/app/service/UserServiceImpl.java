@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void createGroupChat(String name, Iterable<String> participants) {
+	public void createGroupChat(String name, String participants[]) {
 		userRepository.createGroupChat(name, participants);
 	}
 	

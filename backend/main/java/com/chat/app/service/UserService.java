@@ -6,7 +6,7 @@ public interface UserService {
 	
 	public Iterable<String> getAllGroupChats();
 	
-	public void createGroupChat(String name, Iterable<String> participants);
+	public void createGroupChat(String name, String participants[]);
 	
 	public Integer getNumberOfParticipantsInGroupChat(String name);
 	

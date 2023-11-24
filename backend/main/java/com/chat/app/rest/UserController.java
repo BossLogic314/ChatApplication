@@ -49,7 +49,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/create-group-chat")
-	public Boolean createGroupChat(String name, Iterable<String> participants, HttpServletRequest request) {
+	public Boolean createGroupChat(String name, String participants[], HttpServletRequest request) {
 		
 		// If the user has to login
 		if (cookieVerifyService.verifyCookie(request) == null)
