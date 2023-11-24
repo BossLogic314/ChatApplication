@@ -117,8 +117,20 @@ public class MessageServiceImpl implements MessageService {
 	public ArrayList<Integer> getNumberOfUnreadMessages(String user, String chats[]) {
 		
 		ArrayList<Integer> listOfNumberOfUnreadMessages = new ArrayList<>();
-		for (String chat : chats)
-			listOfNumberOfUnreadMessages.add(messageRepository.getNumberOfUnreadMessages(user, chat));
+		for (String chat : chats) {
+			
+			// Group chat
+			if (isGroupChat(chat)) {
+				int groupChatParticipantIndex = userService.getGroupChatParticipantIndex(user, chat);
+				listOfNumberOfUnreadMessages.add(
+						messageRepository.getNumberOfUnreadMessagesFromGroupChat(
+								groupChatParticipantIndex, chat));
+				continue;
+			}
+			
+			// Not a group chat
+			listOfNumberOfUnreadMessages.add(messageRepository.getNumberOfUnreadMessagesFromUser(user, chat));
+		}
 		
 		return listOfNumberOfUnreadMessages;
 	}
