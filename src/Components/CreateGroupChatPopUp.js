@@ -98,7 +98,25 @@ export default class CreateGroupChatPopUp extends React.Component {
     }
 
     createButtonClicked() {
-        
+
+        var len = this.state.addedParticipants.length;
+        var addedParticipantsList = len > 0 ? this.state.addedParticipants[0] : '';
+
+        for (var i = 1; i < len; ++i) {
+            addedParticipantsList += `,${this.state.addedParticipants[i]}`;
+        }
+
+        const args = [
+            { 'key': 'name', 'value': 'anish' },
+            { 'key': 'participants', 'value': addedParticipantsList },
+        ];
+
+        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/create-group-chat', args, true, true);
+
+        // Session timed out, the user has to log in again
+        if (result == null) {
+            this.props.userLoggedOut();
+        }
     }
 
     closeGroupChatPopUp(event) {
