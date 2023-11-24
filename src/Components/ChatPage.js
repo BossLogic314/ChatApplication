@@ -116,7 +116,9 @@ export default class ChatPage extends React.Component {
         }
 
         // If a message is received from the current chat
-        if (toChat == this.state.currentChat) {
+        // (1st clause is for the case of private chat, 2nd clause is for the case of group chats)
+        if ((fromUser == this.state.currentChat && toChat == this.state.currentUser) ||
+            (toChat == this.state.currentChat)) {
             this.chatClicked(this.state.currentChat, false);
         }
     }
