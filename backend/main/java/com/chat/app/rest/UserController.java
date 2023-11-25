@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chat.app.model.Chat;
 import com.chat.app.service.CookieVerifyService;
 import com.chat.app.service.UserService;
 
@@ -26,7 +27,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/get-all-chats")
-	public Iterable<String> getAllChats(String username, String searchString, Boolean includeGroupChats, HttpServletRequest request) {
+	public Iterable<Chat> getAllChats(String username, String searchString, HttpServletRequest request) {
 		
 		// If the user has to login
 		if (cookieVerifyService.verifyCookie(request) == null)
@@ -35,7 +36,20 @@ public class UserController {
 		if (searchString == null)
 			searchString = "";
 		
-		return userService.getAllChats(username, searchString, includeGroupChats);
+		return userService.getAllChats(username, searchString);
+	}
+	
+	@GetMapping("/get-all-other-users")
+	public Iterable<String> getAllOtherUsers(String username, String searchString, HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
+		if (searchString == null)
+			searchString = "";
+		
+		return userService.getAllOtherUsers(username, searchString);
 	}
 	
 	@GetMapping("/get-all-group-chats")

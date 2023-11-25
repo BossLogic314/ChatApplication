@@ -7,6 +7,7 @@ import org.neo4j.driver.internal.value.ListValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chat.app.model.Chat;
 import com.chat.app.repository.UserRepository;
 
 @Service
@@ -16,12 +17,45 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	
 	@Override
-	public Iterable<String> getAllChats(String username, String searchString, Boolean includeGroupChats) {
+	public Iterable<Chat> getAllChats(String username, String searchString) {
 		
-		if (includeGroupChats)
-			return userRepository.getAllChatsForUser(username, searchString);
+		ArrayList<String> chatsNamesList = (ArrayList<String>)
+				userRepository.getAllChatsNames(username, searchString);
 		
-		return userRepository.getAllOtherUsers(username, searchString);
+		ArrayList<ListValue> arrayBuffersList = (ArrayList<ListValue>)
+				userRepository.getAllChatsDisplayPictureBufferArrays(username, searchString);
+		
+		ArrayList<ArrayList<Integer>> arrayBuffersIntList = new ArrayList<>();
+		
+		int arrayBuffersListLen = arrayBuffersList.size();
+		for (int i = 0; i < arrayBuffersListLen; ++i) {
+			ListValue arrayBuffer = (ListValue) arrayBuffersList.get(i);
+			
+			ArrayList<Integer> arrayBufferInt = new ArrayList<>();
+			
+			int arrayBufferLen = arrayBuffer.size();
+			for (int j = 0; j < arrayBufferLen; ++j) {
+				Value value = arrayBuffer.get(j);
+				Integer intValue = value.asInt();
+				
+				arrayBufferInt.add(intValue);
+			}
+			
+			arrayBuffersIntList.add(arrayBufferInt);
+		}
+		
+		ArrayList<Chat> chatsList = new ArrayList<>();
+		for (int i = 0; i < arrayBuffersListLen; ++i) {
+			Chat chat = new Chat(chatsNamesList.get(i), arrayBuffersIntList.get(i));
+			chatsList.add(chat);
+		}
+		
+		return chatsList;
+	}
+	
+	@Override
+	public Iterable<String> getAllOtherUsers(String username, String searchString) {
+		return userRepository.getAllOtherUsersNames(username, searchString);
 	}
 	
 	@Override

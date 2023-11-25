@@ -1,8 +1,12 @@
 package com.chat.app.service;
 
+import com.chat.app.model.Chat;
+
 public interface UserService {
 
-	public Iterable<String> getAllChats(String username, String searchString, Boolean includeGroupChats);
+	public Iterable<Chat> getAllChats(String username, String searchString);
+	
+	public Iterable<String> getAllOtherUsers(String username, String searchString);
 	
 	public Iterable<String> getAllGroupChats();
 	
