@@ -16,6 +16,7 @@ export default class ChatPage extends React.Component {
             currentUser: null,
             currentChat: null,
             chats: [],
+            displayPictureArrayBuffers: [],
             numberOfUnreadMessagesFromEachChat: [],
             readMessages: [],
             unreadMessages: [],
@@ -102,7 +103,7 @@ export default class ChatPage extends React.Component {
 
         console.log(`Got message from ${fromUser} to ${toChat}`);
 
-        // If the current user himself sent the message (As he is a subscriber too)
+        // If the current user himself sent the message (As he is a subscriber of group chats too)
         if (fromUser == this.state.currentUser) {
             return;
         }
@@ -263,9 +264,17 @@ export default class ChatPage extends React.Component {
         // If the else block is absent, it might get executed sometimes when React takes some time to re-render
         else {
 
-            const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(this.state.currentUser, result);
+            // Extracting names of chats and array buffers of each chat's display picture from the obtained result
+            const chatNames = result.map((element) => element.name);
+            const displayPictureArrayBuffers = result.map((element) => element.displayPictureArrayBuffer);
 
-            this.setState({ chats: result, numberOfUnreadMessagesFromEachChat: numberOfUnreadMessagesFromEachChat });
+            const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(this.state.currentUser, chatNames);
+
+            this.setState({
+                chats: chatNames,
+                numberOfUnreadMessagesFromEachChat: numberOfUnreadMessagesFromEachChat,
+                displayPictureArrayBuffers: displayPictureArrayBuffers,
+            });
         }
     }
 
@@ -313,8 +322,9 @@ export default class ChatPage extends React.Component {
                 </div>
                 <div className="body">
                     < ChatsWindow
-                        chats={this.state.chats}
-                        numberOfUnreadMessagesFromEachChat={this.state.numberOfUnreadMessagesFromEachChat}
+                        chats={ this.state.chats }
+                        displayPictureArrayBuffers={ this.state.displayPictureArrayBuffers }
+                        numberOfUnreadMessagesFromEachChat={ this.state.numberOfUnreadMessagesFromEachChat }
                         userLoggedOut={ this.props.userLoggedOut }
                         chatClicked={ this.chatClicked }
                         searchChats={ this.searchChats }

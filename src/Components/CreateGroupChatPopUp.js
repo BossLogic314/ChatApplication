@@ -36,7 +36,7 @@ export default class CreateGroupChatPopUp extends React.Component {
         ];
 
         // Call to get all chats with the provided start string
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-all-chats', args, true, true);
+        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-all-other-users', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == null) {

@@ -1,5 +1,5 @@
 .chat {
-    height: 30px;
+    height: 50px;
     width: 100%;
 
     font-size: 17px;
@@ -7,12 +7,31 @@
     display: flex;
     flex-direction: row;
 
+    align-items: center;
+
     border: 2px solid yellow;
 }
 
 .chat:hover {
     cursor: pointer;
     background-color: rgb(237, 231, 231);
+}
+
+.displayPicture {
+    height: 45px;
+    width: 45px;
+
+    border-radius: 45px;
+
+    margin-left: 3px;
+
+    border: 1px solid black;
+}
+
+.chatName {
+    margin-left: 5px;
+
+    /*border: 2px solid black;*/
 }
 
 .numberOfUnreadMessages {

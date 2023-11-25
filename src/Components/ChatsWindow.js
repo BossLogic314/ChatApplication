@@ -16,6 +16,7 @@ export default class ChatsWindow extends React.Component {
                 < Chat
                     key={ element }
                     username={ element }
+                    displayPictureArrayBuffer={ this.props.displayPictureArrayBuffers[index] }
                     numberOfUnreadMessages={ this.props.numberOfUnreadMessagesFromEachChat[index] }
                     chatClicked={ this.props.chatClicked }
                 />
