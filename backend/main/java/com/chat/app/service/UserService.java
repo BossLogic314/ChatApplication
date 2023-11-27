@@ -17,4 +17,6 @@ public interface UserService {
 	public Iterable<String> getGroupChatParticipants(String name);
 	
 	public Integer getGroupChatParticipantIndex(String user, String chat);
+	
+	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username);
 }

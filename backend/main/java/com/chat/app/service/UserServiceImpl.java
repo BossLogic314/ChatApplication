@@ -30,18 +30,7 @@ public class UserServiceImpl implements UserService {
 		int arrayBuffersListLen = arrayBuffersList.size();
 		for (int i = 0; i < arrayBuffersListLen; ++i) {
 			ListValue arrayBuffer = (ListValue) arrayBuffersList.get(i);
-			
-			ArrayList<Integer> arrayBufferInt = new ArrayList<>();
-			
-			int arrayBufferLen = arrayBuffer.size();
-			for (int j = 0; j < arrayBufferLen; ++j) {
-				Value value = arrayBuffer.get(j);
-				Integer intValue = value.asInt();
-				
-				arrayBufferInt.add(intValue);
-			}
-			
-			arrayBuffersIntList.add(arrayBufferInt);
+			arrayBuffersIntList.add(getArrayBufferInt(arrayBuffer));
 		}
 		
 		ArrayList<Chat> chatsList = new ArrayList<>();
@@ -111,5 +100,31 @@ public class UserServiceImpl implements UserService {
 		
 		// If the user is not a participant of the group chat
 		return null;
+	}
+	
+	@Override
+	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username) {
+		
+		ArrayList<ListValue> arrayBuffersList = userRepository.getDisplayPictureArrayBufferOfUser(username);
+		
+		// There has to be only one element in the list returned
+		ListValue arrayBuffer = arrayBuffersList.get(0);
+		
+		return getArrayBufferInt(arrayBuffer);
+	}
+	
+	private ArrayList<Integer> getArrayBufferInt(ListValue arrayBuffer) {
+		
+		ArrayList<Integer> arrayBufferInt = new ArrayList<>();
+		
+		int arrayBufferLen = arrayBuffer.size();
+		for (int j = 0; j < arrayBufferLen; ++j) {
+			Value value = arrayBuffer.get(j);
+			Integer intValue = value.asInt();
+			
+			arrayBufferInt.add(intValue);
+		}
+		
+		return arrayBufferInt;
 	}
 }

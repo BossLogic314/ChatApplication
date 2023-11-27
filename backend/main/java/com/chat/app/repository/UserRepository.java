@@ -37,4 +37,7 @@ public interface UserRepository extends Neo4jRepository<Chat, String> {
 	
 	@Query("MATCH(gc: GroupChat) WHERE gc.name = $0 RETURN gc.participants")
 	public ArrayList<ListValue> getGroupChatParticipants(String name);
+	
+	@Query("MATCH(u: User) WHERE u.username = $0 RETURN u.displayPictureArrayBuffer")
+	public ArrayList<ListValue> getDisplayPictureArrayBufferOfUser(String username);
 }

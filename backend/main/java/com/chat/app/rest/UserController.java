@@ -82,4 +82,9 @@ public class UserController {
 		
 		return userService.getGroupChatParticipants(name);
 	}
+	
+	@GetMapping("/get-display-picture-array-buffer")
+	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username) {
+		return userService.getDisplayPictureArrayBufferOfUser(username);
+	}
 }
