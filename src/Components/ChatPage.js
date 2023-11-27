@@ -6,6 +6,7 @@ import MessagesWindow from './MessagesWindow';
 import '../Styles/chat-page.css';
 import { Client } from '@stomp/stompjs';
 import CreateGroupChatPopUp from "./CreateGroupChatPopUp";
+import UserProfilePopUp from './UserProfilePopUp';
 
 export default class ChatPage extends React.Component {
 
@@ -21,6 +22,7 @@ export default class ChatPage extends React.Component {
             readMessages: [],
             unreadMessages: [],
             createGroupChat: false,
+            displayUserProfile: false,
         }
 
         this.getCurrentUser = this.getCurrentUser.bind(this);
@@ -28,9 +30,11 @@ export default class ChatPage extends React.Component {
         this.chatClicked = this.chatClicked.bind(this);
         this.sendButtonClicked = this.sendButtonClicked.bind(this);
         this.searchChats = this.searchChats.bind(this);
+        this.optionsButtonClicked = this.optionsButtonClicked.bind(this);
         this.createGroupChatPopUpClicked = this.createGroupChatPopUpClicked.bind(this);
         this.closeGroupChatPopUp = this.closeGroupChatPopUp.bind(this);
         this.logoutButtonClicked = this.logoutButtonClicked.bind(this);
+        this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
         this.handleMessage = this.handleMessage.bind(this);
         this.turnAllMessagesIntoRead = this.turnAllMessagesIntoRead.bind(this);
         this.getNumberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat.bind(this);
@@ -278,6 +282,10 @@ export default class ChatPage extends React.Component {
         }
     }
 
+    optionsButtonClicked() {
+        this.setState({ displayUserProfile: true });
+    }
+
     createGroupChatPopUpClicked() {
         this.setState({ createGroupChat: true });
     }
@@ -285,7 +293,7 @@ export default class ChatPage extends React.Component {
     closeGroupChatPopUp(event) {
 
         // If the background of the pop-up or the close-button is not clicked, there is nothing to do
-        if (event.target.className != 'overlay' &&
+        if (event.target.className != 'create-group-chat-pop-up-overlay' &&
             event.target.className != 'create-group-chat-pop-up-close-button') {
             return;
         }
@@ -309,14 +317,24 @@ export default class ChatPage extends React.Component {
         this.props.userLoggedOut();
     }
 
+    closeUserProfilePopUp(event) {
+        // If the background is not clicked
+        if (event.target.className == 'logout-button' ||
+            event.target.className == 'change-display-picture-button' ||
+            event.target.className == 'display-picture-holder') {
+            return;
+        }
+        this.setState({ displayUserProfile: false });
+    }
+
     render() {
         return(
             <div className="chat-page">
                 <div className="nav-bar">
                     <div className="logo"></div>
-                    <div className="logout-button-box">
-                        <div className="logout-button" onClick={ this.logoutButtonClicked }>
-                            Logout
+                    <div className="options-button-box">
+                        <div className="options-button" onClick={ this.optionsButtonClicked }>
+                            Options
                         </div>
                     </div>
                 </div>
@@ -342,6 +360,12 @@ export default class ChatPage extends React.Component {
                     createGroupChat={ this.state.createGroupChat }
                     closeGroupChatPopUp={ this.closeGroupChatPopUp }
                     userLoggedOut={ this.props.userLoggedOut }
+                />
+
+                < UserProfilePopUp
+                    displayUserProfile = { this.state.displayUserProfile }
+                    logoutButtonClicked = { this.logoutButtonClicked }
+                    closeUserProfilePopUp = { this.closeUserProfilePopUp }
                 />
             </div>
         )

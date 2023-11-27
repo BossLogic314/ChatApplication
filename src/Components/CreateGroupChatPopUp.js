@@ -150,7 +150,7 @@ export default class CreateGroupChatPopUp extends React.Component {
         );
 
         return(
-            <div className='overlay' onClick={ this.closeGroupChatPopUp }>
+            <div className='create-group-chat-pop-up-overlay' onClick={ this.closeGroupChatPopUp }>
                 <div className='create-group-chat-pop-up'>
 
                     <div className='create-group-chat-pop-up-header'>

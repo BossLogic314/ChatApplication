@@ -26,7 +26,7 @@
     border: 2px solid red;
 }
 
-.logout-button-box {
+.options-button-box {
     width: 100px;
     height: 100%;
 
@@ -41,7 +41,7 @@
     justify-content: center;
 }
 
-.logout-button {
+.options-button {
     font-size: 20px;
 
     height: fit-content;
@@ -50,7 +50,7 @@
     background-color: transparent;
 }
 
-.logout-button:hover {
+.options-button:hover {
     cursor: pointer;
     transform: scale(1.25);
 }
