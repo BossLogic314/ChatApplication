@@ -15,6 +15,7 @@ export default class ChatPage extends React.Component {
 
         this.state = {
             currentUser: null,
+            displayPictureArrayBufferOfCurrentUser: [],
             currentChat: null,
             chats: [],
             displayPictureArrayBuffers: [],
@@ -25,6 +26,7 @@ export default class ChatPage extends React.Component {
             displayUserProfile: false,
         }
 
+        this.getDisplayPictureArrayBufferOfCurrentUser = this.getDisplayPictureArrayBufferOfCurrentUser.bind(this);
         this.getCurrentUser = this.getCurrentUser.bind(this);
         this.getAllGroupChats = this.getAllGroupChats.bind(this);
         this.chatClicked = this.chatClicked.bind(this);
@@ -45,25 +47,45 @@ export default class ChatPage extends React.Component {
     componentDidMount() {
 
         // Get the currently logged-in user
-        this.getCurrentUser();
+        const currentUser = this.getCurrentUser();
 
         // Display all the chats
-        this.searchChats();
+        this.searchChats(currentUser);
+
+        // Getting the array buffer of the user's display picture
+        this.getDisplayPictureArrayBufferOfCurrentUser(currentUser);
 
         // Register to the stomp endpoint and subscribe to paths
-        this.registerAndSubscribe();
+        this.registerAndSubscribe(currentUser);
     }
 
-    getCurrentUser() {
+    getDisplayPictureArrayBufferOfCurrentUser( username ) {
+        const args = [
+            { 'key': 'username', 'value': username },
+        ];
 
-        // Call to get the user who is currently logged in
-        var result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-current-user', [], true, false);
+        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-display-picture-array-buffer', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == '') {
             this.props.userLoggedOut();
         }
-        this.state.currentUser = result;
+
+        this.setState({ displayPictureArrayBufferOfCurrentUser: result });
+    }
+
+    getCurrentUser() {
+
+        // Call to get the user who is currently logged in
+        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-current-user', [], true, false);
+
+        // Session timed out, the user has to log in again
+        if (result == '') {
+            this.props.userLoggedOut();
+        }
+
+        this.setState({ currentUser: result });
+        return result;
     }
 
     clearNumberOfUnreadMessagesFromChat(chat) {
@@ -134,7 +156,7 @@ export default class ChatPage extends React.Component {
     }
 
     // Register to a STOMP endpoint and subscribe to a destination path
-    registerAndSubscribe() {
+    registerAndSubscribe(currentUser) {
 
         // Registering to the STOMP endpoint '/chat'
         this.stompClient = new Client({
@@ -147,7 +169,7 @@ export default class ChatPage extends React.Component {
         this.stompClient.onConnect = (frame) => {
 
             // Subscribing to get messages from private chats
-            this.stompClient.subscribe(`/topic/${this.state.currentUser}`, this.handleMessage);
+            this.stompClient.subscribe(`/topic/${currentUser}`, this.handleMessage);
 
             // Subscribing to get messages from group chats
             for (var i = 0; i < groupChatsLen; ++i) {
@@ -248,12 +270,12 @@ export default class ChatPage extends React.Component {
         return Request.makeXhrRequest('GET', 'http://localhost:8080/get-number-of-unread-messages', args, true, true);
     }
 
-    searchChats() {
+    searchChats(currentUser) {
 
         var startString = document.getElementsByClassName('chat-search')[0].value;
 
         const args = [
-            { 'key': 'username', 'value': this.state.currentUser },
+            { 'key': 'username', 'value': currentUser },
             { 'key': 'searchString', 'value': startString },
             { 'key': 'includeGroupChats', 'value': true },
         ];
@@ -272,7 +294,7 @@ export default class ChatPage extends React.Component {
             const chatNames = result.map((element) => element.name);
             const displayPictureArrayBuffers = result.map((element) => element.displayPictureArrayBuffer);
 
-            const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(this.state.currentUser, chatNames);
+            const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(currentUser, chatNames);
 
             this.setState({
                 chats: chatNames,
@@ -364,7 +386,9 @@ export default class ChatPage extends React.Component {
 
                 < UserProfilePopUp
                     displayUserProfile = { this.state.displayUserProfile }
+                    currentUser = { this.state.currentUser }
                     logoutButtonClicked = { this.logoutButtonClicked }
+                    displayPictureArrayBufferOfCurrentUser = { this.state.displayPictureArrayBufferOfCurrentUser }
                     closeUserProfilePopUp = { this.closeUserProfilePopUp }
                 />
             </div>

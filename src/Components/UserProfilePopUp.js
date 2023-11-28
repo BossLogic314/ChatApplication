@@ -12,7 +12,16 @@ export default class UserProfilePopUp extends React.Component {
             displayPictureArrayBuffer: [],
         }
 
+        this.getDisplayPicture = this.getDisplayPicture.bind(this);
         this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
+    }
+
+    getDisplayPicture() {
+        const uint8Array = new Uint8Array(this.props.displayPictureArrayBufferOfCurrentUser);
+        console.log(this.props.displayPictureArrayBufferOfCurrentUser);
+        const blob = new Blob([ uint8Array ]);
+        const blobURL = URL.createObjectURL(blob);
+        return blobURL;
     }
 
     closeUserProfilePopUp(event) {
@@ -29,12 +38,12 @@ export default class UserProfilePopUp extends React.Component {
             <div className='user-profile-pop-up-overlay' onClick={ this.closeUserProfilePopUp }>
                 <div className='user-profile-pop-up-overlay-nav-bar'>
                     <div className='logout-box'>
-                        <div className='logout-button'>Logout</div>
+                        <div className='logout-button' onClick={ this.props.logoutButtonClicked }>Logout</div>
                     </div>
                 </div>
 
                 <div className='display-picture-box'>
-                    <div className='display-picture-holder'></div>
+                    <img className='display-picture-holder' src={ this.getDisplayPicture() }></img>
 
                     <div className='change-display-picture-button'>
                         Change display picture
