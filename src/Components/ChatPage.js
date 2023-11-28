@@ -42,26 +42,26 @@ export default class ChatPage extends React.Component {
         this.getNumberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat.bind(this);
         this.clearNumberOfUnreadMessagesFromChat = this.clearNumberOfUnreadMessagesFromChat.bind(this);
         this.stompClient = null;
-    }
-
-    componentDidMount() {
 
         // Get the currently logged-in user
         const currentUser = this.getCurrentUser();
-
-        // Display all the chats
-        this.searchChats(currentUser);
-
-        // Getting the array buffer of the user's display picture
-        this.getDisplayPictureArrayBufferOfCurrentUser(currentUser);
-
-        // Register to the stomp endpoint and subscribe to paths
-        this.registerAndSubscribe(currentUser);
+        this.state.currentUser = currentUser;
     }
 
-    getDisplayPictureArrayBufferOfCurrentUser( username ) {
+    componentDidMount() {
+        // Display all the chats
+        this.searchChats();
+
+        // Getting the array buffer of the user's display picture
+        this.getDisplayPictureArrayBufferOfCurrentUser();
+
+        // Register to the stomp endpoint and subscribe to paths
+        this.registerAndSubscribe();
+    }
+
+    getDisplayPictureArrayBufferOfCurrentUser() {
         const args = [
-            { 'key': 'username', 'value': username },
+            { 'key': 'username', 'value': this.state.currentUser },
         ];
 
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-display-picture-array-buffer', args, true, true);
@@ -83,8 +83,6 @@ export default class ChatPage extends React.Component {
         if (result == '') {
             this.props.userLoggedOut();
         }
-
-        this.setState({ currentUser: result });
         return result;
     }
 
@@ -156,7 +154,7 @@ export default class ChatPage extends React.Component {
     }
 
     // Register to a STOMP endpoint and subscribe to a destination path
-    registerAndSubscribe(currentUser) {
+    registerAndSubscribe() {
 
         // Registering to the STOMP endpoint '/chat'
         this.stompClient = new Client({
@@ -169,7 +167,7 @@ export default class ChatPage extends React.Component {
         this.stompClient.onConnect = (frame) => {
 
             // Subscribing to get messages from private chats
-            this.stompClient.subscribe(`/topic/${currentUser}`, this.handleMessage);
+            this.stompClient.subscribe(`/topic/${this.state.currentUser}`, this.handleMessage);
 
             // Subscribing to get messages from group chats
             for (var i = 0; i < groupChatsLen; ++i) {
@@ -255,7 +253,7 @@ export default class ChatPage extends React.Component {
 
     getNumberOfUnreadMessagesFromEachChat(user, chats) {
 
-        var len = chats.length;
+        const len = chats.length;
         var chatsList = len > 0 ? chats[0] : '';
 
         for (var i = 1; i < len; ++i) {
@@ -270,12 +268,12 @@ export default class ChatPage extends React.Component {
         return Commons.makeXhrRequest('GET', 'http://localhost:8080/get-number-of-unread-messages', args, true, true);
     }
 
-    searchChats(currentUser) {
+    searchChats() {
 
-        var startString = document.getElementsByClassName('chat-search')[0].value;
+        const startString = document.getElementsByClassName('chat-search')[0].value;
 
         const args = [
-            { 'key': 'username', 'value': currentUser },
+            { 'key': 'username', 'value': this.state.currentUser },
             { 'key': 'searchString', 'value': startString },
             { 'key': 'includeGroupChats', 'value': true },
         ];
@@ -294,7 +292,7 @@ export default class ChatPage extends React.Component {
             const chatNames = result.map((element) => element.name);
             const displayPictureArrayBuffers = result.map((element) => element.displayPictureArrayBuffer);
 
-            const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(currentUser, chatNames);
+            const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(this.state.currentUser, chatNames);
 
             this.setState({
                 chats: chatNames,
@@ -314,9 +312,8 @@ export default class ChatPage extends React.Component {
 
     closeGroupChatPopUp(event) {
 
-        // If the background of the pop-up or the close-button is not clicked, there is nothing to do
-        if (event.target.className != 'create-group-chat-pop-up-overlay' &&
-            event.target.className != 'create-group-chat-pop-up-close-button') {
+        // If the background of the pop-up is not clicked, there is nothing to do
+        if (event.target.className != 'create-group-chat-pop-up-overlay') {
             return;
         }
 

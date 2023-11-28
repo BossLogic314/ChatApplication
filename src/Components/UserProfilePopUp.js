@@ -13,10 +13,16 @@ export default class UserProfilePopUp extends React.Component {
         }
 
         this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
+        this.selectNewDisplayPicture = this.selectNewDisplayPicture.bind(this);
     }
 
     closeUserProfilePopUp(event) {
         this.props.closeUserProfilePopUp(event);
+    }
+
+    selectNewDisplayPicture() {
+        // Clicking the input tag
+        document.getElementsByClassName('select-new-display-picture-button')[0].click();
     }
 
     render() {
@@ -39,9 +45,11 @@ export default class UserProfilePopUp extends React.Component {
                         src={ Commons.getDisplayPictureURL(this.props.displayPictureArrayBufferOfCurrentUser) }>
                     </img>
 
-                    <div className='change-display-picture-button'>
+                    <div className='change-display-picture-button' onClick={ this.selectNewDisplayPicture }>
                         Change display picture
                     </div>
+
+                    <input className='select-new-display-picture-button' id='getFile' type='file' accept='image/*'></input>
                 </div>
             </div>
         );
