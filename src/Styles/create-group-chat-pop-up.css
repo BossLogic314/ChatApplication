@@ -43,24 +43,6 @@
     border: 2px solid red;
 }
 
-.create-group-chat-pop-up-close-button {
-    height: fit-content;
-    width: fit-content;
-
-    font-size: 20px;
-
-    text-align: center;
-
-    background-color: transparent;
-
-    border: 2px solid green;
-}
-
-.create-group-chat-pop-up-close-button:hover {
-    cursor: pointer;
-    transform: scale(1.25);
-}
-
 .group-chat-title, .group-chat-participants {
     width: 80%;
 

@@ -156,11 +156,6 @@ export default class CreateGroupChatPopUp extends React.Component {
 
                     <div className='create-group-chat-pop-up-header'>
                         <div className='create-group-chat-pop-up-title'>Create new group chat</div>
-                        <div
-                            className='create-group-chat-pop-up-close-button'
-                            onClick={ this.closeGroupChatPopUp }>
-                                X
-                        </div>
                     </div>
 
                     <input className='group-chat-title' placeholder='Group name'></input>
