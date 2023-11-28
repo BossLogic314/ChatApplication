@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Request from '../Request';
+import Commons from '../Commons';
 import '../Styles/login-page.css';
 
 export default class LoginPage extends React.Component {
@@ -38,7 +38,7 @@ export default class LoginPage extends React.Component {
             { 'key': 'password', 'value': this.state.password },
         ];
 
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/login', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/login', args, true, true);
 
         if (result != null) {
             this.props.userLoggedIn();

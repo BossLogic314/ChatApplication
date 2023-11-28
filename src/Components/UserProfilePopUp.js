@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Request from "../Request";
+import Commons from "../Commons";
 import '../Styles/user-profile-pop-up.css';
 
 export default class UserProfilePopUp extends React.Component {
@@ -12,16 +12,7 @@ export default class UserProfilePopUp extends React.Component {
             displayPictureArrayBuffer: [],
         }
 
-        this.getDisplayPicture = this.getDisplayPicture.bind(this);
         this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
-    }
-
-    getDisplayPicture() {
-        const uint8Array = new Uint8Array(this.props.displayPictureArrayBufferOfCurrentUser);
-        console.log(this.props.displayPictureArrayBufferOfCurrentUser);
-        const blob = new Blob([ uint8Array ]);
-        const blobURL = URL.createObjectURL(blob);
-        return blobURL;
     }
 
     closeUserProfilePopUp(event) {
@@ -43,7 +34,10 @@ export default class UserProfilePopUp extends React.Component {
                 </div>
 
                 <div className='display-picture-box'>
-                    <img className='display-picture-holder' src={ this.getDisplayPicture() }></img>
+                    <img
+                        className='display-picture-holder'
+                        src={ Commons.getDisplayPictureURL(this.props.displayPictureArrayBufferOfCurrentUser) }>
+                    </img>
 
                     <div className='change-display-picture-button'>
                         Change display picture

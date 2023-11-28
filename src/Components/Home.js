@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Request from '../Request';
+import Commons from '../Commons';
 import LoginPage from './LoginPage';
 import ChatPage from './ChatPage';
 
@@ -13,7 +13,7 @@ export default class Home extends React.Component {
             grantAccess: false
         }
 
-        this.state.grantAccess= Request.makeXhrRequest('GET', 'http://localhost:8080/authorize-user', [], true, true);
+        this.state.grantAccess= Commons.makeXhrRequest('GET', 'http://localhost:8080/authorize-user', [], true, true);
 
         this.userLoggedIn = this.userLoggedIn.bind(this);
         this.userLoggedOut = this.userLoggedOut.bind(this);

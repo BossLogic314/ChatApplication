@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Request from "../Request";
+import Commons from "../Commons";
 import ChatsWindow from "./ChatsWindow";
 import MessagesWindow from './MessagesWindow';
 import '../Styles/chat-page.css';
@@ -64,7 +64,7 @@ export default class ChatPage extends React.Component {
             { 'key': 'username', 'value': username },
         ];
 
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-display-picture-array-buffer', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-display-picture-array-buffer', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == '') {
@@ -77,7 +77,7 @@ export default class ChatPage extends React.Component {
     getCurrentUser() {
 
         // Call to get the user who is currently logged in
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-current-user', [], true, false);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-current-user', [], true, false);
 
         // Session timed out, the user has to log in again
         if (result == '') {
@@ -151,7 +151,7 @@ export default class ChatPage extends React.Component {
     }
 
     getAllGroupChats() {
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-all-group-chats', [], true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-all-group-chats', [], true, true);
         return result;
     }
 
@@ -191,7 +191,7 @@ export default class ChatPage extends React.Component {
             { 'key': 'chat', 'value': chat },
         ];
 
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/turn-all-messages-into-read', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/turn-all-messages-into-read', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == null) {
@@ -214,8 +214,8 @@ export default class ChatPage extends React.Component {
             { 'key': 'chat', 'value': chat },
         ];
 
-        const readMessages = Request.makeXhrRequest('GET', 'http://localhost:8080/get-read-messages', args, true, true);
-        const unreadMessages = Request.makeXhrRequest('GET', 'http://localhost:8080/get-unread-messages', args, true, true);
+        const readMessages = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-read-messages', args, true, true);
+        const unreadMessages = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-unread-messages', args, true, true);
 
         // Session timed out, the user has to log in again
         if (readMessages == null || unreadMessages == null) {
@@ -242,7 +242,7 @@ export default class ChatPage extends React.Component {
             { 'key': 'message', 'value': message },
         ];
 
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/post-message', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/post-message', args, true, true);
 
         this.stompClient.publish({
             destination: `/topic/${this.state.currentChat}`,
@@ -267,7 +267,7 @@ export default class ChatPage extends React.Component {
             { 'key': 'chats', 'value': chatsList },
         ];
 
-        return Request.makeXhrRequest('GET', 'http://localhost:8080/get-number-of-unread-messages', args, true, true);
+        return Commons.makeXhrRequest('GET', 'http://localhost:8080/get-number-of-unread-messages', args, true, true);
     }
 
     searchChats(currentUser) {
@@ -281,7 +281,7 @@ export default class ChatPage extends React.Component {
         ];
 
         // Call to get all chats with the provided start string
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-all-chats', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-all-chats', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == null) {
@@ -330,7 +330,7 @@ export default class ChatPage extends React.Component {
         ];
 
         // Call to remove the cookie
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/logout', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/logout', args, true, true);
 
         // Deactivating the stomp client
         this.stompClient.deactivate();

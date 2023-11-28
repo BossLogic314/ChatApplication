@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Request from "../Request";
+import Constants from '../Constants';
+import Commons from "../Commons";
 import '../Styles/create-group-chat-pop-up.css';
 
 export default class CreateGroupChatPopUp extends React.Component {
@@ -36,7 +37,7 @@ export default class CreateGroupChatPopUp extends React.Component {
         ];
 
         // Call to get all chats with the provided start string
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/get-all-other-users', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-all-other-users', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == null) {
@@ -50,7 +51,7 @@ export default class CreateGroupChatPopUp extends React.Component {
 
     suggestedParticipantClicked(event) {
 
-        if (this.state.addedParticipants.length >= 4) {
+        if (this.state.addedParticipants.length >= (Constants.MAXIMUM_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT - 1)) {
             return;
         }
 
@@ -111,7 +112,7 @@ export default class CreateGroupChatPopUp extends React.Component {
             { 'key': 'participants', 'value': addedParticipantsList },
         ];
 
-        const result = Request.makeXhrRequest('GET', 'http://localhost:8080/create-group-chat', args, true, true);
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/create-group-chat', args, true, true);
 
         // Session timed out, the user has to log in again
         if (result == null) {
@@ -183,7 +184,7 @@ export default class CreateGroupChatPopUp extends React.Component {
                         Create
                     </button>
                     <div className='participants-number-message'>
-                        *Atmost 5 people can be a part of a group chat
+                        *Atmost {Constants.MAXIMUM_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT} people can be a part of a group chat
                     </div>
 
                 </div>
