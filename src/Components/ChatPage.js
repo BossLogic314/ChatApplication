@@ -36,6 +36,7 @@ export default class ChatPage extends React.Component {
         this.createGroupChatPopUpClicked = this.createGroupChatPopUpClicked.bind(this);
         this.closeGroupChatPopUp = this.closeGroupChatPopUp.bind(this);
         this.logoutButtonClicked = this.logoutButtonClicked.bind(this);
+        this.newDisplayPictureSelected = this.newDisplayPictureSelected.bind(this);
         this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
         this.handleMessage = this.handleMessage.bind(this);
         this.turnAllMessagesIntoRead = this.turnAllMessagesIntoRead.bind(this);
@@ -242,6 +243,11 @@ export default class ChatPage extends React.Component {
 
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/post-message', args, true, true);
 
+        // Session timed out, the user has to log in again
+        if (result == null) {
+            this.props.userLoggedOut();
+        }
+
         this.stompClient.publish({
             destination: `/topic/${this.state.currentChat}`,
             headers: {fromUser: `${this.state.currentUser}`, toChat: `${this.state.currentChat}`},
@@ -336,11 +342,17 @@ export default class ChatPage extends React.Component {
         this.props.userLoggedOut();
     }
 
+    newDisplayPictureSelected(displayPictureArrayBufferOfCurrentUser) {
+        console.log(displayPictureArrayBufferOfCurrentUser);
+        this.setState({ displayPictureArrayBufferOfCurrentUser : displayPictureArrayBufferOfCurrentUser });
+    }
+
     closeUserProfilePopUp(event) {
         // If the background is not clicked
         if (event.target.className == 'logout-button' ||
             event.target.className == 'change-display-picture-button' ||
-            event.target.className == 'display-picture-holder') {
+            event.target.className == 'display-picture-holder' ||
+            event.target.className == 'select-new-display-picture-button') {
             return;
         }
         this.setState({ displayUserProfile: false });
@@ -387,6 +399,8 @@ export default class ChatPage extends React.Component {
                     logoutButtonClicked = { this.logoutButtonClicked }
                     displayPictureArrayBufferOfCurrentUser = { this.state.displayPictureArrayBufferOfCurrentUser }
                     closeUserProfilePopUp = { this.closeUserProfilePopUp }
+                    newDisplayPictureSelected = { this.newDisplayPictureSelected }
+                    userLoggedOut={ this.props.userLoggedOut }
                 />
             </div>
         )
