@@ -40,4 +40,7 @@ public interface UserRepository extends Neo4jRepository<Chat, String> {
 	
 	@Query("MATCH(u: User) WHERE u.username = $0 RETURN u.displayPictureArrayBuffer")
 	public ArrayList<ListValue> getDisplayPictureArrayBufferOfUser(String username);
+	
+	@Query("MATCH(u: User) WHERE u.username = $0 SET u.displayPictureArrayBuffer = $1")
+	public void newDisplayPictureSelected(String user, ArrayList<Integer> displayPictureArrayBuffer);
 }

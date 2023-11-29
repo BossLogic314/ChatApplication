@@ -87,4 +87,9 @@ public class UserController {
 	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username) {
 		return userService.getDisplayPictureArrayBufferOfUser(username);
 	}
+	
+	@GetMapping("/new-display-picture-selected")
+	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]) {
+		return userService.newDisplayPictureSelected(user, displayPictureArrayBuffer);
+	}
 }

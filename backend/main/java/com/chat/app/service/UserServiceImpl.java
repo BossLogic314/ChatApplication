@@ -127,4 +127,16 @@ public class UserServiceImpl implements UserService {
 		
 		return arrayBufferInt;
 	}
+	
+	@Override
+	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]) {
+		ArrayList<Integer> displayPictureArrayBufferList = new ArrayList<>();
+		
+		int len = displayPictureArrayBuffer.length;
+		for (int i = 0; i < len; ++i)
+			displayPictureArrayBufferList.add(displayPictureArrayBuffer[i]);
+		
+		userRepository.newDisplayPictureSelected(user, displayPictureArrayBufferList);
+		return true;
+	}
 }

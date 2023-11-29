@@ -19,4 +19,6 @@ public interface UserService {
 	public Integer getGroupChatParticipantIndex(String user, String chat);
 	
 	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username);
+	
+	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]);
 }
