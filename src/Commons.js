@@ -45,4 +45,12 @@ export default class Commons {
         const blobURL = URL.createObjectURL(blob);
         return blobURL;
     }
+
+    static isNameUnique(name) {
+        const args = [
+            { 'key': 'name', 'value': name },
+        ];
+
+        return Commons.makeXhrRequest('GET', 'http://localhost:8080/is-name-unique', args, true, true);
+    }
 }

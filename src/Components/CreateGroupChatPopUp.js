@@ -12,11 +12,13 @@ export default class CreateGroupChatPopUp extends React.Component {
         this.state = {
             suggestedParticipants: [],
             addedParticipants: [],
+            errorMessage: '',
         }
 
         this.searchForUsers = this.searchForUsers.bind(this);
         this.suggestedParticipantClicked = this.suggestedParticipantClicked.bind(this);
         this.removeAddedParticipant = this.removeAddedParticipant.bind(this);
+        this.checkIfDataIsValid = this.checkIfDataIsValid.bind(this);
         this.createButtonClicked = this.createButtonClicked.bind(this);
         this.closeGroupChatPopUp = this.closeGroupChatPopUp.bind(this);
     }
@@ -98,17 +100,56 @@ export default class CreateGroupChatPopUp extends React.Component {
         this.setState({ addedParticipants: newAddedParticipants });
     }
 
+    checkIfDataIsValid() {
+        const groupChatName = document.getElementsByClassName('group-chat-name')[0].value;
+        if (groupChatName == '') {
+            this.setState({ errorMessage: Constants.GROUP_CHAT_EMPTY_MESSAGE });
+            return false;
+        }
+
+        const isNameUnique = Commons.isNameUnique(groupChatName);
+
+        // Session timed out, the user has to log in again
+        if (isNameUnique == null) {
+            this.props.userLoggedOut();
+            return false;
+        }
+
+        // If the chosen name of the group chat is not unique
+        if (!isNameUnique) {
+            this.setState({ errorMessage: Constants.GROUP_CHAT_NAME_ALREADY_TAKEN_MESSAGE(groupChatName) });
+            return false;
+        }
+        else if (this.state.addedParticipants.length == 0) {
+            this.setState({ errorMessage: Constants.INVALID_NUM_OF_GROUP_CHAT_PARTICIPANTS_MESSAGE });
+            return false;
+        }
+
+        return true;
+    }
+
     createButtonClicked() {
 
-        var len = this.state.addedParticipants.length;
+        // Checking if the name of the group chat and the number of added participants are valid
+        const isDataValid = this.checkIfDataIsValid();
+
+        // If the entered data of the group chat is invalid, there is nothing to do
+        if (!isDataValid) {
+            return;
+        }
+
+        const len = this.state.addedParticipants.length;
         var addedParticipantsList = len > 0 ? this.state.addedParticipants[0] : '';
 
         for (var i = 1; i < len; ++i) {
             addedParticipantsList += `,${this.state.addedParticipants[i]}`;
         }
 
+        // Adding the current user in the participants list
+        addedParticipantsList += `,${this.props.currentUser}`;
+
         const args = [
-            { 'key': 'name', 'value': 'anish' },
+            { 'key': 'name', 'value': 'Test' },
             { 'key': 'participants', 'value': addedParticipantsList },
         ];
 
@@ -158,7 +199,7 @@ export default class CreateGroupChatPopUp extends React.Component {
                         <div className='create-group-chat-pop-up-title'>Create new group chat</div>
                     </div>
 
-                    <input className='group-chat-title' placeholder='Group name'></input>
+                    <input className='group-chat-name' placeholder='Group name'></input>
                     <input
                         className='group-chat-participants'
                         placeholder='Add participants here'
@@ -179,7 +220,11 @@ export default class CreateGroupChatPopUp extends React.Component {
                         Create
                     </button>
                     <div className='participants-number-message'>
-                        *Atmost {Constants.MAXIMUM_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT} people can be a part of a group chat
+                        Atmost { Constants.MAXIMUM_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT } people can be a part of a group chat
+                    </div>
+
+                    <div className='error-message'>
+                        { this.state.errorMessage }
                     </div>
 
                 </div>
