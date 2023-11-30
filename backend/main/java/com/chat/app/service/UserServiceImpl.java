@@ -144,7 +144,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Boolean isNameUnique(String name) {
 		ArrayList<Boolean> list = (ArrayList<Boolean>) userRepository.isNameUnique(name);
-		
-		return list != null && list.size() > 0;
+		return list == null || list.size() == 0;
 	}
 }
