@@ -84,12 +84,22 @@ public class UserController {
 	}
 	
 	@GetMapping("/get-display-picture-array-buffer")
-	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username) {
+	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username, HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
 		return userService.getDisplayPictureArrayBufferOfUser(username);
 	}
 	
 	@GetMapping("/new-display-picture-selected")
-	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]) {
+	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[], HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
 		return userService.newDisplayPictureSelected(user, displayPictureArrayBuffer);
 	}
 }
