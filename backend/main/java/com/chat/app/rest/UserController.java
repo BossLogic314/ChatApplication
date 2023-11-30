@@ -102,4 +102,14 @@ public class UserController {
 		
 		return userService.newDisplayPictureSelected(user, displayPictureArrayBuffer);
 	}
+	
+	@GetMapping("/is-name-unique")
+	public Boolean isNameUnique(String name, HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
+		return userService.isNameUnique(name);
+	}
 }

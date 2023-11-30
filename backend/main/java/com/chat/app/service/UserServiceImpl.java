@@ -140,4 +140,11 @@ public class UserServiceImpl implements UserService {
 		userRepository.newDisplayPictureSelected(user, displayPictureArrayBufferList);
 		return true;
 	}
+	
+	@Override
+	public Boolean isNameUnique(String name) {
+		ArrayList<Boolean> list = (ArrayList<Boolean>) userRepository.isNameUnique(name);
+		
+		return list != null && list.size() > 0;
+	}
 }

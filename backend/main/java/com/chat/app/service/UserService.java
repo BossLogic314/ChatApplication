@@ -21,4 +21,6 @@ public interface UserService {
 	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username);
 	
 	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]);
+	
+	public Boolean isNameUnique(String name);
 }
