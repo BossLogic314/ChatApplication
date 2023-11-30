@@ -32,8 +32,8 @@ public interface UserRepository extends Neo4jRepository<Chat, String> {
 			+ "RETURN c.displayPictureArrayBuffer")
 	public ArrayList<ListValue> getAllChatsDisplayPictureBufferArrays(String username, String searchString);
 	
-	@Query("CREATE(gc: GroupChat{name: $0, participants: $1})")
-	public void createGroupChat(String name, String participants[]);
+	@Query("CREATE(gc: GroupChat{name: $0, participants: $1, displayPictureArrayBuffer: $2})")
+	public void createGroupChat(String name, String participants[], ArrayList<Integer> defaultDisplayPictureArrayBuffer);
 	
 	@Query("MATCH(gc: GroupChat) WHERE gc.name = $0 RETURN gc.participants")
 	public ArrayList<ListValue> getGroupChatParticipants(String name);

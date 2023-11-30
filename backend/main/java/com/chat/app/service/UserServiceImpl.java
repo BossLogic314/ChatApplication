@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chat.app.model.Chat;
+import com.chat.app.model.Constants;
 import com.chat.app.repository.UserRepository;
 
 @Service
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void createGroupChat(String name, String participants[]) {
-		userRepository.createGroupChat(name, participants);
+		userRepository.createGroupChat(name, participants, Constants.DEFAULT_DISPLAY_PICTURE_ARRAY_BUFFER);
 	}
 	
 	@Override
