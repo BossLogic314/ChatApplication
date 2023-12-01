@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Commons from '../Commons';
 import '../Styles/login-page.css';
+import Constants from '../Constants';
 
 export default class LoginPage extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            errorMessage: '',
+        }
 
         var username = sessionStorage.getItem("username");
         if (username == null) {
@@ -19,6 +24,7 @@ export default class LoginPage extends React.Component {
         }
 
         this.credentialsChanged = this.credentialsChanged.bind(this);
+        this.checkIfDataIsValid = this.checkIfDataIsValid.bind(this);
         this.submitClicked = this.submitClicked.bind(this);
     }
 
@@ -32,10 +38,30 @@ export default class LoginPage extends React.Component {
         }
     }
 
-    submitClicked() {
+    checkIfDataIsValid() {
+        const username = document.getElementsByClassName('username')[0].value;
+        const password = document.getElementsByClassName('password')[0].value;
+
+        if (username == '') {
+            this.setState({ errorMessage: Constants.USERNAME_EMPTY_MESSAGE });
+            return false;
+        }
+
+        if (username.length > Constants.USERNAME_MAX_LENGTH) {
+            this.setState({ errorMessage: Constants.USERNAME_LENGTH_MESSAGE });
+            return false;
+        }
+
+        const isNameUnique = Commons.isNameUnique(username);
+
+        if (!isNameUnique) {
+            this.setState({ errorMessage: Constants.USERNAME_ALREADY_TAKEN_MESSAGE(username) });
+            return false;
+        }
+
         const args = [
-            { 'key': 'username', 'value': this.state.username },
-            { 'key': 'password', 'value': this.state.password },
+            { 'key': 'username', 'value': username },
+            { 'key': 'password', 'value': password },
         ];
 
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/login', args, true, true);
@@ -43,6 +69,26 @@ export default class LoginPage extends React.Component {
         if (result != null) {
             this.props.userLoggedIn();
         }
+        else {
+            this.setState({ errorMessage: Constants.INVALID_USERNAME_PASSWORD_MESSAGE });
+            return false;
+        }
+
+        return true;
+    }
+
+    submitClicked() {
+
+        // Check if the entered data is valid
+        const isDataValid = this.checkIfDataIsValid();
+
+        // If the data entered is invalid, there is nothing to be done
+        if (!isDataValid) {
+            return;
+        }
+
+        // If the authentication is successful
+        this.props.userLoggedIn();
     }
 
     render() {
@@ -65,6 +111,7 @@ export default class LoginPage extends React.Component {
                     </input>
                     <button className="submit-button" onClick={ this.submitClicked }>Submit</button>
                     <div className="no-account-message">Not having an account? Sign up</div>
+                    <div className="login-error-message">{ this.state.errorMessage }</div>
                 </div>
             </div>
         );

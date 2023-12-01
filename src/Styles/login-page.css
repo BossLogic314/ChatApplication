@@ -62,3 +62,12 @@
 .no-account-message {
     margin-top: 10px;
 }
+
+.login-error-message {
+    font-size: 18px;
+    font-style: italic;
+
+    margin-top: 5px;
+    
+    color: rgb(233, 33, 33);
+}
