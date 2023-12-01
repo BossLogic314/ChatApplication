@@ -10,6 +10,8 @@ export default class Constants {
     // Error messages while authentication
     static USERNAME_EMPTY_MESSAGE = '*Username cannot be empty*';
 
+    static PASSWORD_EMPTY_MESSAGE = '*Password cannot be empty*';
+
     static USERNAME_LENGTH_MESSAGE = `*Username can be atmost ${this.USERNAME_MAX_LENGTH} characters long*`;
 
     static INVALID_USERNAME_PASSWORD_MESSAGE = '*Invalid username or password. Please try again*';

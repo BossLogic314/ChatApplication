@@ -102,26 +102,22 @@ export default class CreateGroupChatPopUp extends React.Component {
 
     checkIfDataIsValid() {
         const groupChatName = document.getElementsByClassName('group-chat-name')[0].value;
+        
         if (groupChatName == '') {
             this.setState({ errorMessage: Constants.GROUP_CHAT_EMPTY_MESSAGE });
             return false;
         }
 
-        const isNameUnique = Commons.isNameUnique(groupChatName);
-
-        // Session timed out, the user has to log in again
-        if (isNameUnique == null) {
-            this.props.userLoggedOut();
+        if (this.state.addedParticipants.length == 0) {
+            this.setState({ errorMessage: Constants.INVALID_NUM_OF_GROUP_CHAT_PARTICIPANTS_MESSAGE });
             return false;
         }
+
+        const isNameUnique = Commons.isNameUnique(groupChatName);
 
         // If the chosen name of the group chat is not unique
         if (!isNameUnique) {
             this.setState({ errorMessage: Constants.GROUP_CHAT_NAME_ALREADY_TAKEN_MESSAGE(groupChatName) });
-            return false;
-        }
-        else if (this.state.addedParticipants.length == 0) {
-            this.setState({ errorMessage: Constants.INVALID_NUM_OF_GROUP_CHAT_PARTICIPANTS_MESSAGE });
             return false;
         }
 

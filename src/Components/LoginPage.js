@@ -47,8 +47,8 @@ export default class LoginPage extends React.Component {
             return false;
         }
 
-        if (username.length > Constants.USERNAME_MAX_LENGTH) {
-            this.setState({ errorMessage: Constants.USERNAME_LENGTH_MESSAGE });
+        if (password == '') {
+            this.setState({ errorMessage: Constants.PASSWORD_EMPTY_MESSAGE });
             return false;
         }
 
@@ -66,10 +66,7 @@ export default class LoginPage extends React.Component {
 
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/login', args, true, true);
 
-        if (result != null) {
-            this.props.userLoggedIn();
-        }
-        else {
+        if (result != true) {
             this.setState({ errorMessage: Constants.INVALID_USERNAME_PASSWORD_MESSAGE });
             return false;
         }

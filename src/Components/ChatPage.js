@@ -163,7 +163,7 @@ export default class ChatPage extends React.Component {
         });
 
         const groupChats = this.getAllGroupChats();
-        const groupChatsLen = groupChats.length;
+        const groupChatsLen = groupChats == null ? 0 : groupChats.length;
 
         this.stompClient.onConnect = (frame) => {
 
@@ -343,7 +343,6 @@ export default class ChatPage extends React.Component {
     }
 
     newDisplayPictureSelected(displayPictureArrayBufferOfCurrentUser) {
-        console.log(displayPictureArrayBufferOfCurrentUser);
         this.setState({ displayPictureArrayBufferOfCurrentUser : displayPictureArrayBufferOfCurrentUser });
     }
 

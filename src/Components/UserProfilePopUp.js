@@ -54,7 +54,6 @@ export default class UserProfilePopUp extends React.Component {
                     var arrayBuffer = await blob.arrayBuffer();
                     var uint8Array = new Uint8Array(arrayBuffer);
                     var array = Array.from(uint8Array);
-                    console.log(array);
 
                     const args = [
                         { 'key': 'user', 'value': currentUser },
