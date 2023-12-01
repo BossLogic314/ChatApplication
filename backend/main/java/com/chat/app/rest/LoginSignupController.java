@@ -22,14 +22,14 @@ public class LoginSignupController {
 	private CookieVerifyService cookieVerifyService;
 	
 	@GetMapping("/authorize-user")
-	public Boolean authenticateUser(HttpServletRequest request) {
+	public Boolean authorizeUser(HttpServletRequest request) {
 		return cookieVerifyService.verifyCookie(request) != null;
 	}
 	
 	@GetMapping("/login")
 	public Boolean getAccess(String username, String password, HttpServletResponse response) {
 		
-		if (!loginSignupService.authenticateUser(username, password))
+		if (!loginSignupService.authorizeUser(username, password))
 			return false;
 		
 		Cookie cookie = new Cookie(Constants.COOKIE_NAME, username);
