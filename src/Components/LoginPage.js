@@ -52,13 +52,6 @@ export default class LoginPage extends React.Component {
             return false;
         }
 
-        const isNameUnique = Commons.isNameUnique(username);
-
-        if (!isNameUnique) {
-            this.setState({ errorMessage: Constants.USERNAME_ALREADY_TAKEN_MESSAGE(username) });
-            return false;
-        }
-
         const args = [
             { 'key': 'username', 'value': username },
             { 'key': 'password', 'value': password },

@@ -115,6 +115,12 @@ export default class CreateGroupChatPopUp extends React.Component {
 
         const isNameUnique = Commons.isNameUnique(groupChatName);
 
+        // Session timed out, the user has to log in again
+        if (isNameUnique == null) {
+            this.props.userLoggedOut();
+            return false;
+        }
+
         // If the chosen name of the group chat is not unique
         if (!isNameUnique) {
             this.setState({ errorMessage: Constants.GROUP_CHAT_NAME_ALREADY_TAKEN_MESSAGE(groupChatName) });

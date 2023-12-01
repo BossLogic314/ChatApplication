@@ -51,6 +51,6 @@ export default class Commons {
             { 'key': 'name', 'value': name },
         ];
 
-        return Commons.makeXhrRequest('GET', 'http://localhost:8080/is-name-unique', args, false, true);
+        return Commons.makeXhrRequest('GET', 'http://localhost:8080/is-name-unique', args, true, true);
     }
 }
