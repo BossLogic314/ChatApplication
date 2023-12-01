@@ -15,6 +15,5 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 	public Boolean authorizeUser(String username, String password) {
 		Boolean authorize = loginSignupRepository.authorizeUser(username, password);
 		return authorize != null && authorize;
-		//return loginSignupRepository.authorizeUser(username, password);
 	}
 }
