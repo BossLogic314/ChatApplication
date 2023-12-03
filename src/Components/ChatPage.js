@@ -228,7 +228,6 @@ export default class ChatPage extends React.Component {
 
     // When the user attempts to send a message across
     sendButtonClicked() {
-
         const message = document.getElementsByClassName('message-holder')[0].value;
         // If the message is empty
         if (message == '') {
@@ -254,7 +253,7 @@ export default class ChatPage extends React.Component {
         });
 
         // Calling this method to re-render all the messages between the users
-        this.chatClicked( this.state.currentChat, false );
+        this.chatClicked( this.state.currentChat, true );
     }
 
     getNumberOfUnreadMessagesFromEachChat(user, chats) {
@@ -368,7 +367,7 @@ export default class ChatPage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="body">
+                <div className="chat-page-body">
                     < ChatsWindow
                         chats={ this.state.chats }
                         displayPictureArrayBuffers={ this.state.displayPictureArrayBuffers }

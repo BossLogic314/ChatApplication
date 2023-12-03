@@ -9,12 +9,16 @@
 
     align-items: center;
 
-    border: 2px solid yellow;
+    margin-top: 1px;
+
+    border: 1px solid yellow;
 }
 
 .chat:hover {
     cursor: pointer;
-    background-color: rgb(237, 231, 231);
+    background-color: rgb(231, 221, 221);
+
+    transform: scale(1.01);
 }
 
 .displayPicture {
@@ -35,5 +39,8 @@
 }
 
 .numberOfUnreadMessages {
-    color: rgb(245, 120, 120);
+    margin-left: auto;
+    margin-right: 15px;
+
+    color: rgb(220, 50, 50);
 }

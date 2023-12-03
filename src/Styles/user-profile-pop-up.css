@@ -19,7 +19,7 @@
     height: 10%;
     width: 100%;
 
-    border: 2px solid blue;
+    /*border: 2px solid blue;*/
 }
 
 .logout-box {
@@ -33,7 +33,7 @@
 
     margin-left: auto;
 
-    border: 2px solid green;
+    /*border: 2px solid green;*/
 }
 
 .logout-button {
@@ -58,7 +58,7 @@
     flex-direction: column;
     align-items: center;
 
-    border: 2px solid red;
+    /*border: 2px solid red;*/
 }
 
 .display-picture-holder {
@@ -76,7 +76,7 @@
 
     margin-top: 25px;
 
-    border: 2px solid white;
+    /*border: 2px solid white;*/
 }
 
 .change-display-picture-button:hover {

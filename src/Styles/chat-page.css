@@ -14,7 +14,9 @@
     display: flex;
     flex-direction: row;
 
-    border: 2px solid black;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
 }
 
 .logo {
@@ -55,9 +57,11 @@
     transform: scale(1.25);
 }
 
-.body {
+.chat-page-body {
     height: 91%;
 
     display: flex;
     flex-direction: row;
+
+    border: 1px solid black;
 }

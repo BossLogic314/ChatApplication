@@ -14,7 +14,9 @@
     
     scrollbar-width: 100px;
 
-    border: 2px solid green;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    /*border: 2px solid green;*/
 }
 
 ::-webkit-scrollbar { 
@@ -46,7 +48,8 @@
     justify-content: center;
     align-items: center;
 
-    border: 2px solid orange;
+    border-left: 1px solid black;
+    /*border: 2px solid orange;*/
 }
 
 .message-holder {

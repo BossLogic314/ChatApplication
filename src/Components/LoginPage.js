@@ -83,7 +83,7 @@ export default class LoginPage extends React.Component {
 
     render() {
         return (
-            <div className="body">
+            <div className="login-page-body">
                 <div className="login">
                     <div className="title">Login</div>
                     <input
