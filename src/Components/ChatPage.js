@@ -7,6 +7,7 @@ import '../Styles/chat-page.css';
 import { Client } from '@stomp/stompjs';
 import CreateGroupChatPopUp from "./CreateGroupChatPopUp";
 import UserProfilePopUp from './UserProfilePopUp';
+import DirectVideoCall from "./DirectVideoCall";
 
 export default class ChatPage extends React.Component {
 
@@ -24,6 +25,7 @@ export default class ChatPage extends React.Component {
             unreadMessages: [],
             createGroupChat: false,
             displayUserProfile: false,
+            displayVideoCallPage: false,
         }
 
         this.getDisplayPictureArrayBufferOfCurrentUser = this.getDisplayPictureArrayBufferOfCurrentUser.bind(this);
@@ -42,6 +44,7 @@ export default class ChatPage extends React.Component {
         this.turnAllMessagesIntoRead = this.turnAllMessagesIntoRead.bind(this);
         this.getNumberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat.bind(this);
         this.clearNumberOfUnreadMessagesFromChat = this.clearNumberOfUnreadMessagesFromChat.bind(this);
+        this.videoCallButtonClicked = this.videoCallButtonClicked.bind(this);
         this.stompClient = null;
 
         // Get the currently logged-in user
@@ -356,6 +359,10 @@ export default class ChatPage extends React.Component {
         this.setState({ displayUserProfile: false });
     }
 
+    videoCallButtonClicked(chat) {
+        this.setState({ displayVideoCallPage: true, currentChat: chat });
+    }
+
     render() {
         return(
             <div className="chat-page">
@@ -376,6 +383,7 @@ export default class ChatPage extends React.Component {
                         chatClicked={ this.chatClicked }
                         searchChats={ this.searchChats }
                         createGroupChatPopUpClicked={ this.createGroupChatPopUpClicked }
+                        videoCallButtonClicked={ this.videoCallButtonClicked }
                     />
                     < MessagesWindow
                         currentUser={ this.state.currentUser } currentChat={ this.state.currentChat }
@@ -399,6 +407,12 @@ export default class ChatPage extends React.Component {
                     closeUserProfilePopUp = { this.closeUserProfilePopUp }
                     newDisplayPictureSelected = { this.newDisplayPictureSelected }
                     userLoggedOut={ this.props.userLoggedOut }
+                />
+
+                < DirectVideoCall
+                    displayVideoCallPage = { this.state.displayVideoCallPage }
+                    currentUser = { this.state.currentUser }
+                    currentChat = { this.state.currentChat }
                 />
             </div>
         )

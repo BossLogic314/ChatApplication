@@ -19,6 +19,7 @@ export default class ChatsWindow extends React.Component {
                     displayPictureArrayBuffer={ this.props.displayPictureArrayBuffers[index] }
                     numberOfUnreadMessages={ this.props.numberOfUnreadMessagesFromEachChat[index] }
                     chatClicked={ this.props.chatClicked }
+                    videoCallButtonClicked={ this.props.videoCallButtonClicked }
                 />
         );
 
