@@ -242,10 +242,27 @@ export default class ChatPage extends React.Component {
             return;
         }
 
+        // Time at which the message is being sent
+        const currentTime = new Date();
+        const year = currentTime.getFullYear();
+        const month = currentTime.getMonth();
+        const date = currentTime.getDate();
+        const hours = currentTime.getHours();
+        const minutes = currentTime.getMinutes();
+        const seconds = currentTime.getSeconds();
+        const milliseconds = currentTime.getMilliseconds();
+
         const args = [
             { 'key': 'from', 'value': this.state.currentUser },
             { 'key': 'chat', 'value': this.state.currentChat },
             { 'key': 'message', 'value': message },
+            { 'key': 'year', 'value': year },
+            { 'key': 'month', 'value': month },
+            { 'key': 'date', 'value': date },
+            { 'key': 'hours', 'value': hours },
+            { 'key': 'minutes', 'value': minutes },
+            { 'key': 'seconds', 'value': seconds },
+            { 'key': 'milliseconds', 'value': milliseconds },
         ];
 
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/post-message', args, true, true);
