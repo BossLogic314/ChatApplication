@@ -20,7 +20,6 @@ export default class ChatPage extends React.Component {
             currentChat: null,
             chats: [],
             displayPictureArrayBuffers: [],
-            numberOfUnreadMessagesFromEachChat: [],
             readMessages: [],
             unreadMessages: [],
             createGroupChat: false,
@@ -90,37 +89,43 @@ export default class ChatPage extends React.Component {
         return result;
     }
 
-    clearNumberOfUnreadMessagesFromChat(chat) {
+    clearNumberOfUnreadMessagesFromChat(chatName) {
 
-        const index = this.state.chats.indexOf(chat);
+        let index = -1;
+        const len = this.state.chats.length;
+
+        for (var i = 0; i < len; ++i) {
+            if (this.state.chats[i].chatName == chatName) {
+                index = i;
+                break;
+            }
+        }
 
         // If the chat does not exist in the list displayed to the user, there is nothing to do
         if (index != -1) {
-
-            const newNumberOfUnreadMessagesFromEachChat =
-                this.state.numberOfUnreadMessagesFromEachChat.map(
-                    (element) => element
-                );
-            newNumberOfUnreadMessagesFromEachChat[index] = 0;
-
-            this.setState({ numberOfUnreadMessagesFromEachChat: newNumberOfUnreadMessagesFromEachChat });
+            const newChats = this.state.chats.map((element) => element);
+            newChats[index].numberOfUnreadMessages = 0;
+            this.setState({ chats: newChats });
         }
     }
 
-    updateNumberOfUnreadMessagesFromChat(chat) {
+    updateNumberOfUnreadMessagesFromChat(chatName) {
 
-        const index = this.state.chats.indexOf(chat);
+        let index = -1;
+        const len = this.state.chats.length;
+
+        for (var i = 0; i < len; ++i) {
+            if (this.state.chats[i].chatName == chatName) {
+                index = i;
+                break;
+            }
+        }
 
         // If the chat does not exist in the list displayed to the user, there is nothing to do
         if (index != -1) {
-
-            const newNumberOfUnreadMessagesFromEachChat =
-                this.state.numberOfUnreadMessagesFromEachChat.map(
-                    (element) => element
-                );
-            newNumberOfUnreadMessagesFromEachChat[index] += 1;
-
-            this.setState({ numberOfUnreadMessagesFromEachChat: newNumberOfUnreadMessagesFromEachChat });
+            const newChats = this.state.chats.map((element) => element);
+            newChats[index].numberOfUnreadMessages += 1;
+            this.setState({ chats: newChats });
         }
     }
 
@@ -302,8 +307,16 @@ export default class ChatPage extends React.Component {
 
             const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(this.state.currentUser, chatNames);
 
+            const chats = chatNames.map(function(element, index) {
+                return {
+                    chatName: chatNames[index],
+                    displayPictureArrayBuffer: displayPictureArrayBuffers[index],
+                    numberOfUnreadMessages: numberOfUnreadMessagesFromEachChat[index],
+                }
+            });
+
             this.setState({
-                chats: chatNames,
+                chats: chats,
                 numberOfUnreadMessagesFromEachChat: numberOfUnreadMessagesFromEachChat,
                 displayPictureArrayBuffers: displayPictureArrayBuffers,
             });
@@ -377,8 +390,6 @@ export default class ChatPage extends React.Component {
                 <div className="chat-page-body">
                     < ChatsWindow
                         chats={ this.state.chats }
-                        displayPictureArrayBuffers={ this.state.displayPictureArrayBuffers }
-                        numberOfUnreadMessagesFromEachChat={ this.state.numberOfUnreadMessagesFromEachChat }
                         userLoggedOut={ this.props.userLoggedOut }
                         chatClicked={ this.chatClicked }
                         searchChats={ this.searchChats }

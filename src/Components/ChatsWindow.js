@@ -14,10 +14,10 @@ export default class ChatsWindow extends React.Component {
         var chats = this.props.chats.map(
             (element, index) =>
                 < Chat
-                    key={ element }
-                    username={ element }
-                    displayPictureArrayBuffer={ this.props.displayPictureArrayBuffers[index] }
-                    numberOfUnreadMessages={ this.props.numberOfUnreadMessagesFromEachChat[index] }
+                    key={ element.chatName }
+                    username={ element.chatName }
+                    displayPictureArrayBuffer={ element.displayPictureArrayBuffer }
+                    numberOfUnreadMessages={ element.numberOfUnreadMessages }
                     chatClicked={ this.props.chatClicked }
                     videoCallButtonClicked={ this.props.videoCallButtonClicked }
                 />
