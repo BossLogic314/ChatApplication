@@ -203,7 +203,6 @@ export default class ChatPage extends React.Component {
                 (toChat == this.state.currentChat)) {
                 this.chatClicked(this.state.currentChat, false);
             }
-
         });
     }
 
