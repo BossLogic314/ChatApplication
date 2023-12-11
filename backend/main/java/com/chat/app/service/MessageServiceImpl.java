@@ -159,10 +159,10 @@ public class MessageServiceImpl implements MessageService {
 			if (secondsString.length() == 1)
 				secondsString = "0" + secondsString;
 			String millisecondsString = Integer.toString(latestMessage.getMilliseconds());
-			if (millisecondsString.length() == 2)
-				millisecondsString = "0" + millisecondsString;
-			else if (millisecondsString.length() == 1)
+			if (millisecondsString.length() == 1)
 				millisecondsString = "00" + millisecondsString;
+			else if (millisecondsString.length() == 2)
+				millisecondsString = "0" + millisecondsString;
 			
 			// Calculating the time string to return
 			String timeString = yearString + monthString + dateString + hoursString + minutesString + secondsString + millisecondsString;

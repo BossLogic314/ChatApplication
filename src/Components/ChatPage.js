@@ -316,10 +316,10 @@ export default class ChatPage extends React.Component {
         }
         let milliseconds = '' + currentTime.getMilliseconds();
         if (milliseconds.length == 1) {
-            milliseconds = '0' + milliseconds;
+            milliseconds = '00' + milliseconds;
         }
         else if (milliseconds.length == 2) {
-            milliseconds = '00' + milliseconds;
+            milliseconds = '0' + milliseconds;
         }
 
         const args = [
