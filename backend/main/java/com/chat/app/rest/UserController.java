@@ -104,12 +104,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/is-name-unique")
-	public Boolean isNameUnique(String name, HttpServletRequest request) {
-		
-		// If the user has to login
-		if (cookieVerifyService.verifyCookie(request) == null)
-			return null;
-		
+	public Boolean isNameUnique(String name) {
 		return userService.isNameUnique(name);
 	}
 }
