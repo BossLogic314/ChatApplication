@@ -41,6 +41,16 @@ export default class LoginPage extends React.Component {
             return false;
         }
 
+        if (password.length < Constants.PASSWORD_MIN_LENGTH) {
+            this.setState({ errorMessage: Constants.PASSWORD_MIN_LENGTH_MESSAGE });
+            return false;
+        }
+
+        if (password.length > Constants.PASSWORD_MAX_LENGTH) {
+            this.setState({ errorMessage: Constants.PASSWORD_MAX_LENGTH_MESSAGE });
+            return false;
+        }
+
         const isNameUnique = Commons.isNameUnique(username);
 
         // Session timed out, the user has to log in again

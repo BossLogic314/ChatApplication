@@ -3,15 +3,19 @@ export default class Constants {
     // (Database value - base value) gives the actual value of time
     static BASE_MONTH = 1;
 
-    // Allowed lengths of username
+    // Allowed lengths of username and password
     static USERNAME_MIN_LENGTH = 4;
     static USERNAME_MAX_LENGTH = 10;
+    static PASSWORD_MIN_LENGTH = 4;
+    static PASSWORD_MAX_LENGTH = 20;
 
     // Error messages while authentication and signing up
     static USERNAME_EMPTY_MESSAGE = '*Username cannot be empty*';
     static PASSWORD_EMPTY_MESSAGE = '*Password cannot be empty*';
     static USERNAME_MIN_LENGTH_MESSAGE = `*Username has to be atleast ${this.USERNAME_MIN_LENGTH} characters long*`;
     static USERNAME_MAX_LENGTH_MESSAGE = `*Username can be atmost ${this.USERNAME_MAX_LENGTH} characters long*`;
+    static PASSWORD_MIN_LENGTH_MESSAGE = `*Password has to be atleast ${this.PASSWORD_MIN_LENGTH} characters long*`;
+    static PASSWORD_MAX_LENGTH_MESSAGE = `*Password can be atmost ${this.PASSWORD_MAX_LENGTH} characters long*`;
     static INVALID_USERNAME_PASSWORD_MESSAGE = '*Invalid username or password. Please try again*';
     static USERNAME_ALREADY_TAKEN_MESSAGE(name) {
         return `*The name '${name}' is already taken. Try another username*`;
