@@ -17,6 +17,7 @@ public class Message {
 	private int hours;
 	private int minutes;
 	private int seconds;
+	private int milliseconds;
 	
 	public String getFrom() {
 		return from;
@@ -83,5 +84,11 @@ public class Message {
 	}
 	public void setSeconds(int seconds) {
 		this.seconds = seconds;
+	}
+	public int getMilliseconds() {
+		return milliseconds;
+	}
+	public void setMilliseconds(int milliseconds) {
+		this.milliseconds = milliseconds;
 	}
 }
