@@ -43,6 +43,9 @@ export default class ChatPage extends React.Component {
         this.turnAllMessagesIntoRead = this.turnAllMessagesIntoRead.bind(this);
         this.getNumberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat.bind(this);
         this.clearNumberOfUnreadMessagesFromChat = this.clearNumberOfUnreadMessagesFromChat.bind(this);
+        this.updateNumberOfUnreadMessagesFromChat = this.updateNumberOfUnreadMessagesFromChat.bind(this);
+        this.getLatestMessageTimeOfEachChat = this.getLatestMessageTimeOfEachChat.bind(this);
+        this.updateLastMessageTimeOfChat = this.updateLastMessageTimeOfChat.bind(this);
         this.videoCallButtonClicked = this.videoCallButtonClicked.bind(this);
         this.stompClient = null;
 
@@ -89,28 +92,34 @@ export default class ChatPage extends React.Component {
         return result;
     }
 
-    clearNumberOfUnreadMessagesFromChat(chatName) {
-
+    updateLastMessageTimeOfChat(chats, chatName, time) {
         let index = -1;
-        const len = this.state.chats.length;
+        const len = chats.length;
 
         for (var i = 0; i < len; ++i) {
-            if (this.state.chats[i].chatName == chatName) {
+            if (chats[i].chatName == chatName) {
                 index = i;
                 break;
             }
         }
 
         // If the chat does not exist in the list displayed to the user, there is nothing to do
-        if (index != -1) {
-            const newChats = this.state.chats.map((element) => element);
-            newChats[index].numberOfUnreadMessages = 0;
-            this.setState({ chats: newChats });
+        if (index == -1) {
+            return;
         }
+
+        const newChats = chats.map((element) => element);
+        newChats[i].latestMessageTime = time;
+
+        // Sorting in the descending order of the latest message
+        newChats.sort(function(element1, element2) {
+            return element2.latestMessageTime - element1.latestMessageTime;
+        });
+
+        return newChats;
     }
 
-    updateNumberOfUnreadMessagesFromChat(chatName) {
-
+    clearNumberOfUnreadMessagesFromChat(chatName) {
         let index = -1;
         const len = this.state.chats.length;
 
@@ -122,17 +131,50 @@ export default class ChatPage extends React.Component {
         }
 
         // If the chat does not exist in the list displayed to the user, there is nothing to do
-        if (index != -1) {
-            const newChats = this.state.chats.map((element) => element);
-            newChats[index].numberOfUnreadMessages += 1;
-            this.setState({ chats: newChats });
+        if (index == -1) {
+            return;
         }
+
+        const newChats = this.state.chats.map((element) => element);
+        newChats[index].numberOfUnreadMessages = 0;
+        this.setState({ chats: newChats });
+    }
+
+    updateNumberOfUnreadMessagesFromChat(chats, chatName) {
+
+        let index = -1;
+        const len = chats.length;
+
+        for (var i = 0; i < len; ++i) {
+            if (chats[i].chatName == chatName) {
+                index = i;
+                break;
+            }
+        }
+
+        // If the chat does not exist in the list displayed to the user, there is nothing to do
+        if (index == -1) {
+            return;
+        }
+
+        const newChats = chats.map((element) => element);
+        newChats[index].numberOfUnreadMessages += 1;
+        return newChats;
     }
 
     handleMessage(message) {
-
         const fromUser = message.headers.fromUser;
         const toChat = message.headers.toChat;
+
+        const year = message.headers.year;
+        const month = message.headers.month;
+        const date = message.headers.date;
+        const hours = message.headers.hours;
+        const minutes = message.headers.minutes;
+        const seconds = message.headers.seconds;
+        const milliseconds = message.headers.milliseconds;
+
+        const timeString = '' + year + month + date + hours + minutes + seconds + milliseconds;
 
         console.log(`Got message from ${fromUser} to ${toChat}`);
 
@@ -141,20 +183,28 @@ export default class ChatPage extends React.Component {
             return;
         }
 
+        // Changing the order of chats displayed and the number of unread messages of each chat
+        let newChats = null;
         // If the message is sent to a group chat
         if (toChat != this.state.currentUser) {
-            this.updateNumberOfUnreadMessagesFromChat(toChat);
+            newChats = this.updateLastMessageTimeOfChat(this.state.chats, toChat, timeString);
+            newChats = this.updateNumberOfUnreadMessagesFromChat(newChats, toChat);
         }
         else {
-            this.updateNumberOfUnreadMessagesFromChat(fromUser);
+            newChats = this.updateLastMessageTimeOfChat(this.state.chats, fromUser, timeString);
+            newChats = this.updateNumberOfUnreadMessagesFromChat(newChats, fromUser);
         }
+        this.setState({ chats: newChats }, () => {
 
-        // If a message is received from the current chat
-        // (1st clause is for the case of private chat, 2nd clause is for the case of group chats)
-        if ((fromUser == this.state.currentChat && toChat == this.state.currentUser) ||
-            (toChat == this.state.currentChat)) {
-            this.chatClicked(this.state.currentChat, false);
-        }
+            // This block needs to be executed only after the previous state update
+            // If a message is received from the current chat
+            // (1st clause is for the case of private chat, 2nd clause is for the case of group chats)
+            if ((fromUser == this.state.currentChat && toChat == this.state.currentUser) ||
+                (toChat == this.state.currentChat)) {
+                //this.chatClicked(this.state.currentChat, false);
+            }
+
+        });
     }
 
     getAllGroupChats() {
@@ -244,13 +294,34 @@ export default class ChatPage extends React.Component {
 
         // Time at which the message is being sent
         const currentTime = new Date();
-        const year = currentTime.getFullYear();
-        const month = currentTime.getMonth();
-        const date = currentTime.getDate();
-        const hours = currentTime.getHours();
-        const minutes = currentTime.getMinutes();
-        const seconds = currentTime.getSeconds();
-        const milliseconds = currentTime.getMilliseconds();
+        const year = '' + currentTime.getFullYear();
+        let month = '' + currentTime.getMonth();
+        if (month.length == 1) {
+            month = '0' + month;
+        }
+        let date = '' + currentTime.getDate();
+        if (date.length == 1) {
+            date = '0' + date;
+        }
+        let hours = '' + currentTime.getHours();
+        if (hours.length == 1) {
+            hours = '0' + hours;
+        }
+        let minutes = '' + currentTime.getMinutes();
+        if (minutes.length == 1) {
+            minutes = '0' + minutes;
+        }
+        let seconds = '' + currentTime.getSeconds();
+        if (seconds.length == 1) {
+            seconds = '0' + seconds;
+        }
+        let milliseconds = '' + currentTime.getMilliseconds();
+        if (milliseconds.length == 1) {
+            milliseconds = '0' + milliseconds;
+        }
+        else if (milliseconds.length == 2) {
+            milliseconds = '00' + milliseconds;
+        }
 
         const args = [
             { 'key': 'from', 'value': this.state.currentUser },
@@ -266,23 +337,37 @@ export default class ChatPage extends React.Component {
         ];
 
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/post-message', args, true, true);
-
         // Session timed out, the user has to log in again
         if (result == null) {
             this.props.userLoggedOut();
         }
 
+        const currentTimeString = '' + year + month + date + hours + minutes + seconds + milliseconds;
+        const newChats = this.updateLastMessageTimeOfChat(this.state.chats, this.state.currentChat, currentTimeString);
+
         this.stompClient.publish({
             destination: `/topic/${this.state.currentChat}`,
-            headers: {fromUser: `${this.state.currentUser}`, toChat: `${this.state.currentChat}`},
+            headers: {
+                fromUser: `${this.state.currentUser}`,
+                toChat: `${this.state.currentChat}`,
+                year: `${year}`,
+                month: `${month}`,
+                date: `${date}`,
+                hours: `${hours}`,
+                minutes: `${minutes}`,
+                seconds: `${seconds}`,
+                milliseconds: `${milliseconds}`,
+            },
         });
 
-        // Calling this method to re-render all the messages between the users
-        this.chatClicked( this.state.currentChat, true );
+        this.setState({ chats: newChats }, () => {
+            // Calling the method only after the previous state update
+            // Calling this method to re-render all the messages between the users
+            this.chatClicked( this.state.currentChat, true );
+        });
     }
 
     getNumberOfUnreadMessagesFromEachChat(user, chats) {
-
         const len = chats.length;
         var chatsList = len > 0 ? chats[0] : '';
 
@@ -295,11 +380,26 @@ export default class ChatPage extends React.Component {
             { 'key': 'chats', 'value': chatsList },
         ];
 
-        return Commons.makeXhrRequest('GET', 'http://localhost:8080/get-number-of-unread-messages', args, true, true);
+        return Commons.makeXhrRequest('GET', 'http://localhost:8080/get-number-of-unread-messages-from-each-chat', args, true, true);
+    }
+
+    getLatestMessageTimeOfEachChat(user, chats) {
+        const len = chats.length;
+        var chatsList = len > 0 ? chats[0] : '';
+
+        for (var i = 1; i < len; ++i) {
+            chatsList += `,${chats[i]}`;
+        }
+
+        const args = [
+            { 'key': 'user', 'value': user },
+            { 'key': 'chats', 'value': chatsList },
+        ];
+
+        return Commons.makeXhrRequest('GET', 'http://localhost:8080/get-latest-message-time-of-each-chat', args, true, true);
     }
 
     searchChats() {
-
         const startString = document.getElementsByClassName('chat-search')[0].value;
 
         const args = [
@@ -324,12 +424,20 @@ export default class ChatPage extends React.Component {
 
             const numberOfUnreadMessagesFromEachChat = this.getNumberOfUnreadMessagesFromEachChat(this.state.currentUser, chatNames);
 
+            const latestMessageTimeFromEachChat = this.getLatestMessageTimeOfEachChat(this.state.currentUser, chatNames);
+
             const chats = chatNames.map(function(element, index) {
                 return {
                     chatName: chatNames[index],
                     displayPictureArrayBuffer: displayPictureArrayBuffers[index],
                     numberOfUnreadMessages: numberOfUnreadMessagesFromEachChat[index],
+                    latestMessageTime: latestMessageTimeFromEachChat[index],
                 }
+            });
+
+            // Sorting in the descending order of the latest message
+            chats.sort(function(element1, element2) {
+                return element2.latestMessageTime - element1.latestMessageTime;
             });
 
             this.setState({
