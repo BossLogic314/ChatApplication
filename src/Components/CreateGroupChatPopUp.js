@@ -43,7 +43,7 @@ export default class CreateGroupChatPopUp extends React.Component {
 
         // Session timed out, the user has to log in again
         if (result == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
         // If the else block is absent, it might get executed sometimes when React takes some time to re-render
         else {
@@ -113,11 +113,21 @@ export default class CreateGroupChatPopUp extends React.Component {
             return false;
         }
 
+        if (groupChatName.length < Constants.GROUP_NAME_MIN_LENGTH) {
+            this.setState({ errorMessage: Constants.GROUP_NAME_MIN_LENGTH_MESSAGE });
+            return false;
+        }
+
+        if (groupChatName.length > Constants.GROUP_NAME_MAX_LENGTH) {
+            this.setState({ errorMessage: Constants.GROUP_NAME_MAX_LENGTH_MESSAGE });
+            return false;
+        }
+
         const isNameUnique = Commons.isNameUnique(groupChatName);
 
         // Session timed out, the user has to log in again
         if (isNameUnique == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
             return false;
         }
 
@@ -159,7 +169,7 @@ export default class CreateGroupChatPopUp extends React.Component {
 
         // Session timed out, the user has to log in again
         if (result == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
     }
 
