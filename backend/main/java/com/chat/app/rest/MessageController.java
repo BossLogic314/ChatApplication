@@ -41,24 +41,36 @@ public class MessageController {
 		return messageService.getUnreadMessagesFromChat(user, chat);
 	}
 	
-	@GetMapping("/get-number-of-unread-messages")
-	public ArrayList<Integer> getNumberOfUnreadMessages(String user, String chats[], HttpServletRequest request) {
+	@GetMapping("/get-number-of-unread-messages-from-each-chat")
+	public ArrayList<Integer> getNumberOfUnreadMessagesFromEachChat(String user, String chats[], HttpServletRequest request) {
 		
 		// If the user has to login
 		if (cookieVerifyService.verifyCookie(request) == null)
 			return null;
 		
-		return messageService.getNumberOfUnreadMessages(user, chats);
+		return messageService.getNumberOfUnreadMessagesFromEachChat(user, chats);
+	}
+	
+	@GetMapping("/get-latest-message-time-of-each-chat")
+	public ArrayList<String> getLatestMessageTimeFromEachChat(String user, String chats[], HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
+		return messageService.getLatestMessageTimeFromEachChat(user, chats);
 	}
 	
 	@GetMapping("/post-message")
-	public Boolean postMessageToChat(String from, String chat, String message, HttpServletRequest request) {
+	public Boolean postMessageToChat(String from, String chat, String message,
+			Integer year, Integer month, Integer date, Integer hours,
+			Integer minutes, Integer seconds, Integer milliseconds, HttpServletRequest request) {
 		
 		// If the user has to login
 		if (cookieVerifyService.verifyCookie(request) == null)
 			return null;
 		
-		return messageService.postMessage(from, chat, message);
+		return messageService.postMessage(from, chat, message, year, month, date, hours, minutes, seconds, milliseconds);
 	}
 	
 	@GetMapping("/turn-all-messages-into-read")

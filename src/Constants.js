@@ -1,7 +1,6 @@
 export default class Constants {
 
     // (Database value - base value) gives the actual value of time
-    static BASE_YEAR = 1900;
     static BASE_MONTH = 1;
 
     // Maximum allowed length of username

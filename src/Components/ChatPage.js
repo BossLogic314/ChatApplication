@@ -201,7 +201,7 @@ export default class ChatPage extends React.Component {
             // (1st clause is for the case of private chat, 2nd clause is for the case of group chats)
             if ((fromUser == this.state.currentChat && toChat == this.state.currentUser) ||
                 (toChat == this.state.currentChat)) {
-                //this.chatClicked(this.state.currentChat, false);
+                this.chatClicked(this.state.currentChat, false);
             }
 
         });
@@ -426,7 +426,7 @@ export default class ChatPage extends React.Component {
 
             const latestMessageTimeFromEachChat = this.getLatestMessageTimeOfEachChat(this.state.currentUser, chatNames);
 
-            const chats = chatNames.map(function(element, index) {
+            let chats = chatNames.map(function(element, index) {
                 return {
                     chatName: chatNames[index],
                     displayPictureArrayBuffer: displayPictureArrayBuffers[index],

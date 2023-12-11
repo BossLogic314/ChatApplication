@@ -24,7 +24,7 @@ export default class Message extends React.Component {
                 <div className='message-date-time'>
                 {
                     `${ this.props.hours }:${ this.props.minutes }:${ this.props.seconds }, ` +
-                    `${ this.props.date }-${ this.props.month + Constants.BASE_MONTH }-${ this.props.year + Constants.BASE_YEAR }`
+                    `${ this.props.date }-${ this.props.month + Constants.BASE_MONTH }-${ this.props.year }`
                 }
                 </div>
 

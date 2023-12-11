@@ -1,9 +1,6 @@
 package com.chat.app.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,10 +60,9 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Boolean postMessage(String from, String chat, String message) {
-		
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		Date date = new Date();
+	public Boolean postMessage(String from, String chat, String message,
+			Integer year, Integer month, Integer date, Integer hours,
+			Integer minutes, Integer seconds, Integer milliseconds) {
 		
 		Boolean isGroupChat = isGroupChat(chat);
 		int numberOfParticipants = isGroupChat ?
@@ -95,8 +91,7 @@ public class MessageServiceImpl implements MessageService {
 			groupName = chat;
 		}
 		messageRepository.postMessage(from, chat, message, groupName, readList,
-				date.getDate(), date.getMonth(), date.getYear(),
-				date.getHours(), date.getMinutes(), date.getSeconds());
+				date, month, year, hours, minutes, seconds, milliseconds);
 		
 		return true;
 	}
@@ -114,7 +109,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public ArrayList<Integer> getNumberOfUnreadMessages(String user, String chats[]) {
+	public ArrayList<Integer> getNumberOfUnreadMessagesFromEachChat(String user, String chats[]) {
 		
 		ArrayList<Integer> listOfNumberOfUnreadMessages = new ArrayList<>();
 		for (String chat : chats) {
@@ -133,5 +128,23 @@ public class MessageServiceImpl implements MessageService {
 		}
 		
 		return listOfNumberOfUnreadMessages;
+	}
+	
+	public ArrayList<String> getLatestMessageTimeFromEachChat(String user, String chats[]) {
+		
+		ArrayList<String> listOfLatestMessageTimes = new ArrayList<>();
+		for (String chat : chats) {
+			
+			String latestMessageTime = messageRepository.getLatestMessageTimeFromChat(user, chat);
+			
+			if (latestMessageTime == null) {
+				listOfLatestMessageTimes.add("0");
+				continue;
+			}
+			
+			listOfLatestMessageTimes.add(latestMessageTime);
+		}
+		
+		return listOfLatestMessageTimes;
 	}
 }
