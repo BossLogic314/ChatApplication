@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import Commons from '../Commons';
 import LoginPage from './LoginPage';
 import ChatPage from './ChatPage';
+import SignupPage from './SignupPage';
 
 export default class Home extends React.Component {
 
@@ -10,25 +11,54 @@ export default class Home extends React.Component {
         super(props);
 
         this.state = {
-            grantAccess: false
+            grantAccess: false,
+            displayLoginPage: true,
+            displayChatPage: false,
+            displaySignupPage: false,
         }
 
-        this.state.grantAccess= Commons.makeXhrRequest('GET', 'http://localhost:8080/authorize-user', [], true, true);
+        this.state.displayChatPage = Commons.makeXhrRequest('GET', 'http://localhost:8080/authorize-user', [], true, true);
+        this.state.displayLoginPage = !(this.state.displayChatPage);
 
-        this.userLoggedIn = this.userLoggedIn.bind(this);
-        this.userLoggedOut = this.userLoggedOut.bind(this);
+        this.displayLoginPage = this.displayLoginPage.bind(this);
+        this.displayChatPage = this.displayChatPage.bind(this);
+        this.displaySignupPage = this.displaySignupPage.bind(this);
     }
 
-    userLoggedIn() {
-        this.setState({ grantAccess: true });
+    displayLoginPage() {
+        this.setState({ displayLoginPage: true, displayChatPage: false, displaySignupPage: false, });
     }
 
-    userLoggedOut() {
-        this.setState({ grantAccess: false });
+    displayChatPage() {
+        this.setState({ displayLoginPage: false, displayChatPage: true, displaySignupPage: false, });
+    }
+
+    displaySignupPage() {
+        this.setState({ displayLoginPage: false, displayChatPage: false, displaySignupPage: true, });
     }
 
     render() {
-        return this.state.grantAccess ? ( <ChatPage userLoggedOut={this.userLoggedOut} /> ) :
-            ( <LoginPage userLoggedIn={this.userLoggedIn} /> );
+        if (this.state.displayLoginPage) {
+            return (
+                <LoginPage
+                    displaySignupPage={ this.displaySignupPage }
+                    displayChatPage={ this.displayChatPage }
+                />
+            );
+        }
+        else if (this.state.displaySignupPage) {
+            return (
+                <SignupPage
+                    displayLoginPage={ this.displayLoginPage }
+                />
+            );
+        }
+        else if (this.state.displayChatPage) {
+            return (
+                <ChatPage
+                    displayLoginPage={this.displayLoginPage}
+                />
+            );
+        }
     }
 }

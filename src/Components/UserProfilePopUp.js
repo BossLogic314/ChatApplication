@@ -65,7 +65,7 @@ export default class UserProfilePopUp extends React.Component {
 
                     // Session timed out, the user has to log in again
                     if (result == null) {
-                        this.props.userLoggedOut();
+                        this.props.displayLoginPage();
                     }
 
                     demo(array);

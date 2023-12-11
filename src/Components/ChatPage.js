@@ -74,7 +74,7 @@ export default class ChatPage extends React.Component {
 
         // Session timed out, the user has to log in again
         if (result == '') {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
 
         this.setState({ displayPictureArrayBufferOfCurrentUser: result });
@@ -87,7 +87,7 @@ export default class ChatPage extends React.Component {
 
         // Session timed out, the user has to log in again
         if (result == '') {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
         return result;
     }
@@ -251,7 +251,7 @@ export default class ChatPage extends React.Component {
 
         // Session timed out, the user has to log in again
         if (result == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
 
         this.clearNumberOfUnreadMessagesFromChat(chat);
@@ -275,7 +275,7 @@ export default class ChatPage extends React.Component {
 
         // Session timed out, the user has to log in again
         if (readMessages == null || unreadMessages == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
         // If the else block is absent, it might get executed sometimes when React takes some time to re-render
         else {
@@ -338,7 +338,7 @@ export default class ChatPage extends React.Component {
         const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/post-message', args, true, true);
         // Session timed out, the user has to log in again
         if (result == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
 
         const currentTimeString = '' + year + month + date + hours + minutes + seconds + milliseconds;
@@ -412,7 +412,7 @@ export default class ChatPage extends React.Component {
 
         // Session timed out, the user has to log in again
         if (result == null) {
-            this.props.userLoggedOut();
+            this.props.displayLoginPage();
         }
         // If the else block is absent, it might get executed sometimes when React takes some time to re-render
         else {
@@ -478,7 +478,7 @@ export default class ChatPage extends React.Component {
         this.stompClient.deactivate();
 
         // Notifying the parent component that the user logged out
-        this.props.userLoggedOut();
+        this.props.displayLoginPage();
     }
 
     newDisplayPictureSelected(displayPictureArrayBufferOfCurrentUser) {
@@ -514,16 +514,17 @@ export default class ChatPage extends React.Component {
                 <div className="chat-page-body">
                     < ChatsWindow
                         chats={ this.state.chats }
-                        userLoggedOut={ this.props.userLoggedOut }
                         chatClicked={ this.chatClicked }
                         searchChats={ this.searchChats }
                         createGroupChatPopUpClicked={ this.createGroupChatPopUpClicked }
                         videoCallButtonClicked={ this.videoCallButtonClicked }
                     />
                     < MessagesWindow
-                        currentUser={ this.state.currentUser } currentChat={ this.state.currentChat }
-                        readMessages={ this.state.readMessages } unreadMessages={ this.state.unreadMessages }
-                        userLoggedOut={ this.props.userLoggedOut } sendButtonClicked={ this.sendButtonClicked }
+                        currentUser={ this.state.currentUser }
+                        currentChat={ this.state.currentChat }
+                        readMessages={ this.state.readMessages }
+                        unreadMessages={ this.state.unreadMessages }
+                        sendButtonClicked={ this.sendButtonClicked }
                     />
                 </div>
 
@@ -531,7 +532,7 @@ export default class ChatPage extends React.Component {
                     currentUser={ this.state.currentUser }
                     createGroupChat={ this.state.createGroupChat }
                     closeGroupChatPopUp={ this.closeGroupChatPopUp }
-                    userLoggedOut={ this.props.userLoggedOut }
+                    displayLoginPage={ this.props.displayLoginPage }
                 />
 
                 < UserProfilePopUp
@@ -541,7 +542,7 @@ export default class ChatPage extends React.Component {
                     displayPictureArrayBufferOfCurrentUser = { this.state.displayPictureArrayBufferOfCurrentUser }
                     closeUserProfilePopUp = { this.closeUserProfilePopUp }
                     newDisplayPictureSelected = { this.newDisplayPictureSelected }
-                    userLoggedOut={ this.props.userLoggedOut }
+                    displayLoginPage={ this.props.displayLoginPage }
                 />
 
                 < DirectVideoCall

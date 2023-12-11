@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-.login-page-body {
+.signup-page-body {
     height: 91%;
 
     display: flex;
@@ -16,7 +16,7 @@
     /*border: 2px solid green;*/
 }
 
-.login {
+.signup {
     height: 43%;
     width: 600px;
 
@@ -55,24 +55,24 @@
     transform: scale(1.1);
 }
 
-.no-account-message {
+.already-have-an-account-message {
     font-size: 17px;
     margin-top: 10px;
 }
 
-.signup-button {
+.login-button {
     font-size: 17px;
     font-style: italic;
 
     color: rgb(20, 113, 213);
 }
 
-.signup-button:hover {
+.login-button:hover {
     cursor: pointer;
     transform: scale(1.25);
 }
 
-.login-error-message {
+.signup-error-message {
     font-size: 18px;
     font-style: italic;
 

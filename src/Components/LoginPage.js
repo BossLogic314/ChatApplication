@@ -21,6 +21,7 @@ export default class LoginPage extends React.Component {
         this.state = {
             username: username,
             password: '',
+            displaySubmitPage: false,
         }
 
         this.credentialsChanged = this.credentialsChanged.bind(this);
@@ -78,7 +79,7 @@ export default class LoginPage extends React.Component {
         }
 
         // If the authentication is successful
-        this.props.userLoggedIn();
+        this.props.displayChatPage();
     }
 
     render() {
@@ -100,7 +101,8 @@ export default class LoginPage extends React.Component {
                         onChange={ this.credentialsChanged }>
                     </input>
                     <button className="submit-button" onClick={ this.submitClicked }>Submit</button>
-                    <div className="no-account-message">Not having an account? Sign up</div>
+                    <div className="no-account-message">Not having an account?</div>
+                    <div className='signup-button' onClick={ this.props.displaySignupPage }>Sign up</div>
                     <div className="login-error-message">{ this.state.errorMessage }</div>
                 </div>
             </div>
