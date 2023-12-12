@@ -23,4 +23,6 @@ public interface UserService {
 	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]);
 	
 	public Boolean isNameUnique(String name);
+	
+	public Boolean registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]);
 }

@@ -146,4 +146,10 @@ public class UserServiceImpl implements UserService {
 		ArrayList<Boolean> list = (ArrayList<Boolean>) userRepository.isNameUnique(name);
 		return list == null || list.size() == 0;
 	}
+	
+	@Override
+	public Boolean registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]) {
+		userRepository.registerNewUser(username, password, displayPictureArrayBuffer);
+		return true;
+	}
 }

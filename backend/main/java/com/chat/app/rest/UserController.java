@@ -107,4 +107,9 @@ public class UserController {
 	public Boolean isNameUnique(String name) {
 		return userService.isNameUnique(name);
 	}
+	
+	@GetMapping("/register-new-user")
+	public Boolean registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]) {
+		return userService.registerNewUser(username, password, displayPictureArrayBuffer);
+	}
 }
