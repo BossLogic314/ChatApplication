@@ -10,14 +10,9 @@ export default class LoginPage extends React.Component {
         super(props);
 
         this.state = {
-            username: username,
+            username: '',
             password: '',
             errorMessage: '',
-        }
-
-        var username = sessionStorage.getItem("username");
-        if (username == null) {
-            username = '';
         }
 
         this.credentialsChanged = this.credentialsChanged.bind(this);
@@ -26,13 +21,6 @@ export default class LoginPage extends React.Component {
     }
 
     credentialsChanged(event) {
-        if (event.target.className == 'username') {
-            sessionStorage.setItem('username', event.target.value);
-            this.setState({ username: event.target.value });
-        }
-        else if (event.target.className == 'password') {
-            this.setState({ password: event.target.value });
-        }
     }
 
     checkIfDataIsValid() {
@@ -86,15 +74,12 @@ export default class LoginPage extends React.Component {
                     <input
                         className="username"
                         placeholder="Username"
-                        value={ this.state.username }
                         onChange={ this.credentialsChanged }>
                     </input>
                     <input
                         type='password'
                         className="password"
-                        placeholder="Password"
-                        value={ this.state.password }
-                        onChange={ this.credentialsChanged }>
+                        placeholder="Password">
                     </input>
                     <button className="submit-button" onClick={ this.submitClicked }>Submit</button>
                     <div className="no-account-message">Not having an account?</div>

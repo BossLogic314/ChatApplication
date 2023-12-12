@@ -12,14 +12,26 @@ export default class Home extends React.Component {
 
         this.state = {
             grantAccess: false,
-            displayLoginPage: true,
+            displayLoginPage: false,
             displayChatPage: false,
             displaySignupPage: false,
             displaySignupSuccessMessage: false,
         }
 
+        // Determining which page to display
         this.state.displayChatPage = Commons.makeXhrRequest('GET', 'http://localhost:8080/authorize-user', [], true, true);
-        this.state.displayLoginPage = !(this.state.displayChatPage);
+
+        // If the chat page is not be displayed
+        if (!this.state.displayChatPage) {
+            const currentPage = sessionStorage.getItem('currentPage');
+
+            if (currentPage == null || currentPage == 'login') {
+                this.state.displayLoginPage = true;
+            }
+            else if (currentPage == 'signup') {
+                this.state.displaySignupPage = true;
+            }
+        }
 
         this.displayLoginPage = this.displayLoginPage.bind(this);
         this.displayChatPage = this.displayChatPage.bind(this);
@@ -31,6 +43,7 @@ export default class Home extends React.Component {
             displayLoginPage: true, displayChatPage: false, displaySignupPage: false,
             displaySignupSuccessMessage: displaySignupSuccessMessage,
         });
+        sessionStorage.setItem('currentPage', 'login');
     }
 
     displayChatPage() {
@@ -39,6 +52,7 @@ export default class Home extends React.Component {
 
     displaySignupPage() {
         this.setState({ displayLoginPage: false, displayChatPage: false, displaySignupPage: true, });
+        sessionStorage.setItem('currentPage', 'signup');
     }
 
     render() {
