@@ -109,7 +109,12 @@ public class UserController {
 	}
 	
 	@GetMapping("/register-new-user")
-	public Boolean registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]) {
+	public Boolean registerNewUser(String username, String password, Integer displayPictureArrayBuffer[], HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
 		return userService.registerNewUser(username, password, displayPictureArrayBuffer);
 	}
 }
