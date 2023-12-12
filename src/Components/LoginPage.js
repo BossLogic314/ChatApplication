@@ -10,18 +10,14 @@ export default class LoginPage extends React.Component {
         super(props);
 
         this.state = {
+            username: username,
+            password: '',
             errorMessage: '',
         }
 
         var username = sessionStorage.getItem("username");
         if (username == null) {
             username = '';
-        }
-
-        this.state = {
-            username: username,
-            password: '',
-            displaySubmitPage: false,
         }
 
         this.credentialsChanged = this.credentialsChanged.bind(this);
@@ -103,7 +99,11 @@ export default class LoginPage extends React.Component {
                     <button className="submit-button" onClick={ this.submitClicked }>Submit</button>
                     <div className="no-account-message">Not having an account?</div>
                     <div className='signup-button' onClick={ this.props.displaySignupPage }>Sign up</div>
-                    <div className="login-error-message">{ this.state.errorMessage }</div>
+                    {
+                        this.props.displaySignupSuccessMessage ?
+                            <div className="signup-success-message">{ Constants.SIGNUP_SUCCESS_MESSAGE }</div> :
+                            <div className="login-error-message">{ this.state.errorMessage }</div>
+                    }
                 </div>
             </div>
         );

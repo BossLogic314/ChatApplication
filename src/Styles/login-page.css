@@ -80,3 +80,12 @@
     
     color: rgb(233, 33, 33);
 }
+
+.signup-success-message {
+    font-size: 18px;
+    font-style: italic;
+
+    margin-top: 5px;
+    
+    color: rgb(15, 177, 26);
+}

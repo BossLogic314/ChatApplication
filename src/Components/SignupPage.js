@@ -15,6 +15,7 @@ export default class LoginPage extends React.Component {
         
         this.checkIfDataIsValid = this.checkIfDataIsValid.bind(this);
         this.submitClicked = this.submitClicked.bind(this);
+        this.loginButtonClicked = this.loginButtonClicked.bind(this);
     }
 
     checkIfDataIsValid() {
@@ -69,6 +70,8 @@ export default class LoginPage extends React.Component {
     }
 
     submitClicked() {
+        const username = document.getElementsByClassName('username')[0].value;
+        const password = document.getElementsByClassName('password')[0].value;
 
         // Check if the entered data is valid
         const isDataValid = this.checkIfDataIsValid();
@@ -79,7 +82,20 @@ export default class LoginPage extends React.Component {
         }
 
         // If successfully registered
-        // Register logic to be written here
+        const args = [
+            { 'key': 'username', 'value': username },
+            { 'key': 'password', 'value': password },
+            { 'key': 'displayPictureArrayBuffer', 'value': Constants.DEFAULT_DISPLAY_PICTURE_ARRAY_BUFFER },
+        ];
+
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/register-new-user', args, true, true);
+
+        // Displaying the login page with a success message
+        this.props.displayLoginPage(true);
+    }
+
+    loginButtonClicked() {
+        this.props.displayLoginPage();
     }
 
     render() {
@@ -98,7 +114,7 @@ export default class LoginPage extends React.Component {
                     </input>
                     <button className="submit-button" onClick={ this.submitClicked }>Submit</button>
                     <div className="already-have-an-account-message">Already have an account?</div>
-                    <div className='login-button' onClick={ this.props.displayLoginPage }>Log in</div>
+                    <div className='login-button' onClick={ this.loginButtonClicked }>Log in</div>
                     <div className="signup-error-message">{ this.state.errorMessage }</div>
                 </div>
             </div>

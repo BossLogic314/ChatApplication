@@ -15,6 +15,7 @@ export default class Home extends React.Component {
             displayLoginPage: true,
             displayChatPage: false,
             displaySignupPage: false,
+            displaySignupSuccessMessage: false,
         }
 
         this.state.displayChatPage = Commons.makeXhrRequest('GET', 'http://localhost:8080/authorize-user', [], true, true);
@@ -25,8 +26,11 @@ export default class Home extends React.Component {
         this.displaySignupPage = this.displaySignupPage.bind(this);
     }
 
-    displayLoginPage() {
-        this.setState({ displayLoginPage: true, displayChatPage: false, displaySignupPage: false, });
+    displayLoginPage(displaySignupSuccessMessage=false) {
+        this.setState({
+            displayLoginPage: true, displayChatPage: false, displaySignupPage: false,
+            displaySignupSuccessMessage: displaySignupSuccessMessage,
+        });
     }
 
     displayChatPage() {
@@ -43,6 +47,7 @@ export default class Home extends React.Component {
                 <LoginPage
                     displaySignupPage={ this.displaySignupPage }
                     displayChatPage={ this.displayChatPage }
+                    displaySignupSuccessMessage={ this.state.displaySignupSuccessMessage }
                 />
             );
         }
