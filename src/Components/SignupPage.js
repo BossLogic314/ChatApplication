@@ -13,7 +13,7 @@ export default class LoginPage extends React.Component {
             errorMessage: '',
         }
 
-        this.storedUsername = localStorage.getItem('signup-page-username');
+        this.storedUsername = sessionStorage.getItem('signup-page-username');
         if (this.storedUsername == null) {
             this.storedUsername = '';
         }
@@ -25,8 +25,8 @@ export default class LoginPage extends React.Component {
     }
 
     usernameChanged(event) {
-        // Storing the updated username in local storage
-        localStorage.setItem('signup-page-username', event.target.value);
+        // Storing the updated username in session storage
+        sessionStorage.setItem('signup-page-username', event.target.value);
     }
 
     checkIfDataIsValid() {
