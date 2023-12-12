@@ -12,10 +12,21 @@ export default class LoginPage extends React.Component {
         this.state = {
             errorMessage: '',
         }
+
+        this.storedUsername = localStorage.getItem('signup-page-username');
+        if (this.storedUsername == null) {
+            this.storedUsername = '';
+        }
         
+        this.usernameChanged = this.usernameChanged.bind(this);
         this.checkIfDataIsValid = this.checkIfDataIsValid.bind(this);
         this.submitClicked = this.submitClicked.bind(this);
         this.loginButtonClicked = this.loginButtonClicked.bind(this);
+    }
+
+    usernameChanged(event) {
+        // Storing the updated username in local storage
+        localStorage.setItem('signup-page-username', event.target.value);
     }
 
     checkIfDataIsValid() {
@@ -105,7 +116,9 @@ export default class LoginPage extends React.Component {
                     <div className="title">Signup</div>
                     <input
                         className="username"
-                        placeholder="Username">
+                        placeholder="Username"
+                        defaultValue={ this.storedUsername }
+                        onChange={ this.usernameChanged }>
                     </input>
                     <input
                         type='password'
