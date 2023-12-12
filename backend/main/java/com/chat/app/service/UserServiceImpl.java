@@ -149,7 +149,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Boolean registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]) {
-		userRepository.registerNewUser(username, password, displayPictureArrayBuffer);
+		ArrayList<Integer> displayPictureArrayBufferList = new ArrayList<>();
+		
+		int len = displayPictureArrayBuffer.length;
+		for (int i = 0; i < len; ++i)
+			displayPictureArrayBufferList.add(displayPictureArrayBuffer[i]);
+		
+		userRepository.registerNewUser(username, password, displayPictureArrayBufferList);
 		return true;
 	}
 }

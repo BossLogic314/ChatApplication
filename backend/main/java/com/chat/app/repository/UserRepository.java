@@ -48,5 +48,5 @@ public interface UserRepository extends Neo4jRepository<Chat, String> {
 	public Iterable<Boolean> isNameUnique(String name);
 	
 	@Query("CREATE(u: User{username: $0, password: $1, displayPictureArrayBuffer: $2})")
-	public void registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]);
+	public void registerNewUser(String username, String password, ArrayList<Integer> displayPictureArrayBuffer);
 }
