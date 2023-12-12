@@ -47,6 +47,6 @@ public interface UserRepository extends Neo4jRepository<Chat, String> {
 	@Query("MATCH(u: User | GroupChat) WHERE (u.username = $0 OR u.name = $0) RETURN FALSE")
 	public Iterable<Boolean> isNameUnique(String name);
 	
-	@Query("MATCH(u: User{username: $0, password: $1, displayPictureArrayBuffer: $2})")
+	@Query("CREATE(u: User{username: $0, password: $1, displayPictureArrayBuffer: $2})")
 	public void registerNewUser(String username, String password, Integer displayPictureArrayBuffer[]);
 }
