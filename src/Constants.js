@@ -80,7 +80,7 @@ export default class Constants {
 
     // Error messages while creating a new group chat
     static INVALID_NUM_OF_GROUP_CHAT_PARTICIPANTS_MESSAGE =
-        `*Each group chat must contain atleast ${Constants.MIN_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT} participants*`;
+        `*Group chat must contain atleast ${Constants.MIN_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT} participants*`;
 
     static GROUP_CHAT_EMPTY_MESSAGE = "*The group chat's name cannot be empty*";
     static GROUP_NAME_MIN_LENGTH_MESSAGE = `*Group name has to be atleast ${this.GROUP_NAME_MIN_LENGTH} characters long*`;

@@ -145,6 +145,8 @@ export default class CreateGroupChatPopUp extends React.Component {
         // Checking if the name of the group chat and the number of added participants are valid
         const isDataValid = this.checkIfDataIsValid();
 
+        const groupChatName = document.getElementsByClassName('group-chat-name')[0].value;
+
         // If the entered data of the group chat is invalid, there is nothing to do
         if (!isDataValid) {
             return;
@@ -161,7 +163,7 @@ export default class CreateGroupChatPopUp extends React.Component {
         addedParticipantsList += `,${this.props.currentUser}`;
 
         const args = [
-            { 'key': 'name', 'value': 'Test' },
+            { 'key': 'name', 'value': groupChatName },
             { 'key': 'participants', 'value': addedParticipantsList },
         ];
 
