@@ -8,6 +8,7 @@ import { Client } from '@stomp/stompjs';
 import CreateGroupChatPopUp from "./CreateGroupChatPopUp";
 import UserProfilePopUp from './UserProfilePopUp';
 import DirectVideoCall from "./DirectVideoCall";
+import ChatProfilePopUp from './ChatProfilePopUp';
 
 export default class ChatPage extends React.Component {
 
@@ -24,6 +25,9 @@ export default class ChatPage extends React.Component {
             unreadMessages: [],
             createGroupChat: false,
             displayUserProfile: false,
+            displayChatProfile: false,
+            chatPopUpName: null,
+            chatPopUpDisplayPictureArrayBuffer: [],
             displayVideoCallPage: false,
         }
 
@@ -47,6 +51,8 @@ export default class ChatPage extends React.Component {
         this.getLatestMessageTimeOfEachChat = this.getLatestMessageTimeOfEachChat.bind(this);
         this.updateLastMessageTimeOfChat = this.updateLastMessageTimeOfChat.bind(this);
         this.videoCallButtonClicked = this.videoCallButtonClicked.bind(this);
+        this.displayPictureClicked = this.displayPictureClicked.bind(this);
+        this.closeChatProfilePopUp = this.closeChatProfilePopUp.bind(this);
         this.stompClient = null;
 
         // Get the currently logged-in user
@@ -500,6 +506,29 @@ export default class ChatPage extends React.Component {
         this.setState({ displayVideoCallPage: true, currentChat: chat });
     }
 
+    displayPictureClicked(chatName) {
+        var displayPictureArrayBuffer = [];
+        const len = this.state.chats.length;
+        for (var i = 0; i < len; ++i) {
+
+            if (this.state.chats[i].chatName == chatName) {
+                displayPictureArrayBuffer = this.state.chats[i].displayPictureArrayBuffer;
+                break;
+            }
+        }
+
+        this.setState({ displayChatProfile: true, chatPopUpName: chatName,
+            chatPopUpDisplayPictureArrayBuffer: displayPictureArrayBuffer });
+    }
+
+    closeChatProfilePopUp(event) {
+        // If the background is not clicked
+        if (event.target.className == 'display-picture-holder') {
+            return;
+        }
+        this.setState({ displayChatProfile: false });
+    }
+
     render() {
         return(
             <div className="chat-page">
@@ -518,6 +547,7 @@ export default class ChatPage extends React.Component {
                         searchChats={ this.searchChats }
                         createGroupChatPopUpClicked={ this.createGroupChatPopUpClicked }
                         videoCallButtonClicked={ this.videoCallButtonClicked }
+                        displayPictureClicked={ this.displayPictureClicked }
                     />
                     < MessagesWindow
                         currentUser={ this.state.currentUser }
@@ -536,19 +566,26 @@ export default class ChatPage extends React.Component {
                 />
 
                 < UserProfilePopUp
-                    displayUserProfile = { this.state.displayUserProfile }
-                    currentUser = { this.state.currentUser }
-                    logoutButtonClicked = { this.logoutButtonClicked }
-                    displayPictureArrayBufferOfCurrentUser = { this.state.displayPictureArrayBufferOfCurrentUser }
-                    closeUserProfilePopUp = { this.closeUserProfilePopUp }
-                    newDisplayPictureSelected = { this.newDisplayPictureSelected }
+                    displayUserProfile={ this.state.displayUserProfile }
+                    currentUser={ this.state.currentUser }
+                    logoutButtonClicked={ this.logoutButtonClicked }
+                    displayPictureArrayBufferOfCurrentUser={ this.state.displayPictureArrayBufferOfCurrentUser }
+                    closeUserProfilePopUp={ this.closeUserProfilePopUp }
+                    newDisplayPictureSelected={ this.newDisplayPictureSelected }
                     displayLoginPage={ this.props.displayLoginPage }
                 />
 
+                < ChatProfilePopUp
+                    displayChatProfile={ this.state.displayChatProfile }
+                    chatName={ this.state.chatPopUpName }
+                    chatDisplayPictureArrayBuffer={ this.state.chatPopUpDisplayPictureArrayBuffer }
+                    closeChatProfilePopUp={ this.closeChatProfilePopUp }
+                />
+
                 < DirectVideoCall
-                    displayVideoCallPage = { this.state.displayVideoCallPage }
-                    currentUser = { this.state.currentUser }
-                    currentChat = { this.state.currentChat }
+                    displayVideoCallPage={ this.state.displayVideoCallPage }
+                    currentUser={ this.state.currentUser }
+                    currentChat={ this.state.currentChat }
                 />
             </div>
         )

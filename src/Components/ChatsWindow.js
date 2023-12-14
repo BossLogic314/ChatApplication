@@ -15,11 +15,12 @@ export default class ChatsWindow extends React.Component {
             (element, index) =>
                 < Chat
                     key={ element.chatName }
-                    username={ element.chatName }
+                    chatName={ element.chatName }
                     displayPictureArrayBuffer={ element.displayPictureArrayBuffer }
                     numberOfUnreadMessages={ element.numberOfUnreadMessages }
                     chatClicked={ this.props.chatClicked }
                     videoCallButtonClicked={ this.props.videoCallButtonClicked }
+                    displayPictureClicked={ this.props.displayPictureClicked }
                 />
         );
 
