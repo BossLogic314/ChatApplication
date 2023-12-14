@@ -55,7 +55,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void createGroupChat(String name, String participants[]) {
-		userRepository.createGroupChat(name, participants, Constants.DEFAULT_DISPLAY_PICTURE_ARRAY_BUFFER);
+		userRepository.createGroupChat(name, participants, Constants.DEFAULT_DISPLAY_PICTURE_ARRAY_BUFFER,
+				participants.length);
 	}
 	
 	@Override
