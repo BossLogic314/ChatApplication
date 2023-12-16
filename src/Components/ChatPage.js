@@ -41,7 +41,7 @@ export default class ChatPage extends React.Component {
         this.createGroupChatPopUpClicked = this.createGroupChatPopUpClicked.bind(this);
         this.closeGroupChatPopUp = this.closeGroupChatPopUp.bind(this);
         this.logoutButtonClicked = this.logoutButtonClicked.bind(this);
-        this.newDisplayPictureSelected = this.newDisplayPictureSelected.bind(this);
+        this.newDisplayPictureSelectedOfCurrentUser = this.newDisplayPictureSelectedOfCurrentUser.bind(this);
         this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
         this.handleMessage = this.handleMessage.bind(this);
         this.turnAllMessagesIntoRead = this.turnAllMessagesIntoRead.bind(this);
@@ -53,6 +53,8 @@ export default class ChatPage extends React.Component {
         this.videoCallButtonClicked = this.videoCallButtonClicked.bind(this);
         this.displayPictureClicked = this.displayPictureClicked.bind(this);
         this.closeChatProfilePopUp = this.closeChatProfilePopUp.bind(this);
+        this.getGroupChatParticipantsFromEachChat = this.getGroupChatParticipantsFromEachChat.bind(this);
+        this.newDisplayPictureSelectedOfChatProfile = this.newDisplayPictureSelectedOfChatProfile.bind(this);
         this.stompClient = null;
 
         // Get the currently logged-in user
@@ -404,6 +406,21 @@ export default class ChatPage extends React.Component {
         return Commons.makeXhrRequest('GET', 'http://localhost:8080/get-latest-message-time-of-each-chat', args, true, true);
     }
 
+    getGroupChatParticipantsFromEachChat(chatNames) {
+        const args = [
+            { 'key': 'chatNames', 'value': chatNames },
+        ];
+
+        const result = Commons.makeXhrRequest('GET', 'http://localhost:8080/get-group-chat-participants-from-each-chat', args, true, true);
+
+        // Session timed out, the user has to log in again
+        if (result == null) {
+            this.props.displayLoginPage();
+        }
+
+        return result;
+    }
+
     searchChats() {
         const startString = document.getElementsByClassName('chat-search')[0].value;
 
@@ -431,12 +448,15 @@ export default class ChatPage extends React.Component {
 
             const latestMessageTimeFromEachChat = this.getLatestMessageTimeOfEachChat(this.state.currentUser, chatNames);
 
+            const groupChatParticipantsOfEachChat = this.getGroupChatParticipantsFromEachChat(chatNames);
+
             let chats = chatNames.map(function(element, index) {
                 return {
                     chatName: chatNames[index],
                     displayPictureArrayBuffer: displayPictureArrayBuffers[index],
                     numberOfUnreadMessages: numberOfUnreadMessagesFromEachChat[index],
                     latestMessageTime: latestMessageTimeFromEachChat[index],
+                    groupChatParticipants: groupChatParticipantsOfEachChat[index],
                 }
             });
 
@@ -487,16 +507,41 @@ export default class ChatPage extends React.Component {
         this.props.displayLoginPage();
     }
 
-    newDisplayPictureSelected(displayPictureArrayBufferOfCurrentUser) {
+    newDisplayPictureSelectedOfCurrentUser(displayPictureArrayBufferOfCurrentUser) {
         this.setState({ displayPictureArrayBufferOfCurrentUser : displayPictureArrayBufferOfCurrentUser });
+    }
+
+    newDisplayPictureSelectedOfChatProfile(chatName, chatPopUpDisplayPictureArrayBuffer) {
+        this.setState({ chatPopUpDisplayPictureArrayBuffer: chatPopUpDisplayPictureArrayBuffer });
+
+        // Updating the new profile picture in the chats section
+        const len = this.state.chats.length;
+        var index = -1;
+
+        // Finding the index of chatName, whose display picture needs to be updated
+        for (var i = 0; i < len; ++i) {
+
+            if (this.state.chats[i].chatName == chatName) {
+                index = i;
+                break;
+            }
+        }
+
+        // If the desired chat does not exist
+        if (index == -1) {
+            return;
+        }
+
+        var newChats = this.state.chats.map((element) => element);
+        newChats[index].displayPictureArrayBuffer = chatPopUpDisplayPictureArrayBuffer;
     }
 
     closeUserProfilePopUp(event) {
         // If the background is not clicked
-        if (event.target.className == 'logout-button' ||
-            event.target.className == 'change-display-picture-button' ||
-            event.target.className == 'display-picture-holder' ||
-            event.target.className == 'select-new-display-picture-button') {
+        if (event.target.className == 'user-profile-logout-button' ||
+            event.target.className == 'user-profile-change-display-picture-button' ||
+            event.target.className == 'user-profile-display-picture-holder' ||
+            event.target.className == 'user-profile-select-new-display-picture-button') {
             return;
         }
         this.setState({ displayUserProfile: false });
@@ -508,22 +553,27 @@ export default class ChatPage extends React.Component {
 
     displayPictureClicked(chatName) {
         var displayPictureArrayBuffer = [];
+        var chatPopUpParticipants = null;
         const len = this.state.chats.length;
         for (var i = 0; i < len; ++i) {
 
             if (this.state.chats[i].chatName == chatName) {
                 displayPictureArrayBuffer = this.state.chats[i].displayPictureArrayBuffer;
+                chatPopUpParticipants = this.state.chats[i].groupChatParticipants;
                 break;
             }
         }
 
         this.setState({ displayChatProfile: true, chatPopUpName: chatName,
-            chatPopUpDisplayPictureArrayBuffer: displayPictureArrayBuffer });
+            chatPopUpDisplayPictureArrayBuffer: displayPictureArrayBuffer,
+            chatPopUpParticipants: chatPopUpParticipants });
     }
 
     closeChatProfilePopUp(event) {
         // If the background is not clicked
-        if (event.target.className == 'display-picture-holder') {
+        if (event.target.className == 'chat-profile-change-display-picture-button' ||
+            event.target.className == 'chat-profile-display-picture-holder' ||
+            event.target.className == 'chat-profile-select-new-display-picture-button') {
             return;
         }
         this.setState({ displayChatProfile: false });
@@ -571,7 +621,7 @@ export default class ChatPage extends React.Component {
                     logoutButtonClicked={ this.logoutButtonClicked }
                     displayPictureArrayBufferOfCurrentUser={ this.state.displayPictureArrayBufferOfCurrentUser }
                     closeUserProfilePopUp={ this.closeUserProfilePopUp }
-                    newDisplayPictureSelected={ this.newDisplayPictureSelected }
+                    newDisplayPictureSelectedOfCurrentUser={ this.newDisplayPictureSelectedOfCurrentUser }
                     displayLoginPage={ this.props.displayLoginPage }
                 />
 
@@ -579,7 +629,10 @@ export default class ChatPage extends React.Component {
                     displayChatProfile={ this.state.displayChatProfile }
                     chatName={ this.state.chatPopUpName }
                     chatDisplayPictureArrayBuffer={ this.state.chatPopUpDisplayPictureArrayBuffer }
+                    chatParticipants={ this.state.chatPopUpParticipants }
                     closeChatProfilePopUp={ this.closeChatProfilePopUp }
+                    newDisplayPictureSelectedOfChatProfile={ this.newDisplayPictureSelectedOfChatProfile }
+                    displayLoginPage={ this.props.displayLoginPage }
                 />
 
                 < DirectVideoCall

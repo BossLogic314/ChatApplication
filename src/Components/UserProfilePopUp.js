@@ -9,11 +9,7 @@ const QUALITY = 0.7;
 export default class UserProfilePopUp extends React.Component {
 
     constructor(props) {
-        super(props)
-
-        this.state = {
-            displayPictureArrayBuffer: [],
-        }
+        super(props);
 
         this.closeUserProfilePopUp = this.closeUserProfilePopUp.bind(this);
         this.selectNewDisplayPicture = this.selectNewDisplayPicture.bind(this);
@@ -26,12 +22,12 @@ export default class UserProfilePopUp extends React.Component {
 
     selectNewDisplayPicture() {
         // Clicking the input tag (the input tag is hidden)
-        document.getElementsByClassName('select-new-display-picture-button')[0].click();
+        document.getElementsByClassName('user-profile-select-new-display-picture-button')[0].click();
     }
 
     newDisplayPictureSelected(event) {
         const currentUser = this.props.currentUser;
-        var demo = this.props.newDisplayPictureSelected;
+        var demo = this.props.newDisplayPictureSelectedOfCurrentUser;
 
         // Getting the selected file
         const file = event.target.files[0];
@@ -56,7 +52,7 @@ export default class UserProfilePopUp extends React.Component {
                     var array = Array.from(uint8Array);
 
                     const args = [
-                        { 'key': 'user', 'value': currentUser },
+                        { 'key': 'chat', 'value': currentUser },
                         { 'key': 'displayPictureArrayBuffer', 'value': uint8Array },
                     ];
 
@@ -85,25 +81,26 @@ export default class UserProfilePopUp extends React.Component {
         return(
             <div className='user-profile-pop-up-overlay' onClick={ this.closeUserProfilePopUp }>
                 <div className='user-profile-pop-up-overlay-nav-bar'>
-                    <div className='logout-box'>
-                        <div className='logout-button' onClick={ this.props.logoutButtonClicked }>Logout</div>
+                    <div className='user-profile-logout-box'>
+                        <div className='user-profile-logout-button' onClick={ this.props.logoutButtonClicked }>Logout</div>
                     </div>
                 </div>
 
-                <div className='display-picture-box'>
+                <div className='user-profile-display-picture-box'>
                     <img
-                        className='display-picture-holder'
+                        className='user-profile-display-picture-holder'
                         src={ Commons.getDisplayPictureURL(this.props.displayPictureArrayBufferOfCurrentUser) }>
                     </img>
 
-                    <div className='change-display-picture-button' onClick={ this.selectNewDisplayPicture }>
+                    <div className='user-profile-change-display-picture-button' onClick={ this.selectNewDisplayPicture }>
                         Change display picture
                     </div>
 
                     <input
-                        className='select-new-display-picture-button'
+                        className='user-profile-select-new-display-picture-button'
                         id='getFile' type='file' accept='image/*'
-                        onChange={ this.newDisplayPictureSelected }></input>
+                        onChange={ this.newDisplayPictureSelected }>
+                    </input>
                 </div>
             </div>
         );

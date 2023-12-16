@@ -234,7 +234,7 @@ export default class CreateGroupChatPopUp extends React.Component {
                         Create
                     </button>
                     <div className='participants-number-message'>
-                        Atmost { Constants.MAXIMUM_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT } people can be a part of a group chat
+                        Atmost { Constants.MAX_NUM_OF_PARTICIPANTS_IN_GROUP_CHAT } people can be a part of a group chat
                     </div>
 
                     <div className='group-chat-error-message'>
