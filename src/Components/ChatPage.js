@@ -66,7 +66,7 @@ export default class ChatPage extends React.Component {
 
     componentDidMount() {
         // Display all the chats
-        this.searchChats(null, true);
+        this.searchChats();
 
         // Getting the array buffer of the user's display picture
         this.getDisplayPictureArrayBufferOfCurrentUser();
@@ -440,7 +440,7 @@ export default class ChatPage extends React.Component {
         return result;
     }
 
-    searchChats(event, clickFirstChat=false) {
+    searchChats() {
         const startString = document.getElementsByClassName('chat-search')[0].value;
 
         const args = [
@@ -485,15 +485,11 @@ export default class ChatPage extends React.Component {
                 return element2.latestMessageTime - element1.latestMessageTime;
             });
 
-            this.setState({ chats: chats,
+            this.setState({
+                chats: chats,
                 numberOfUnreadMessagesFromEachChat: numberOfUnreadMessagesFromEachChat,
-                displayPictureArrayBuffers: displayPictureArrayBuffers, },
-                () => {
-                    if ( clickFirstChat && this.state.chats.length > 0) {
-                        this.chatClicked(this.state.chats[0].chatName, false);
-                    }
-                }
-            );
+                displayPictureArrayBuffers: displayPictureArrayBuffers,
+            });
         }
     }
 

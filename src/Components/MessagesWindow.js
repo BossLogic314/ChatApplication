@@ -74,18 +74,23 @@ export default class MessagesWindow extends React.Component {
                     { unreadMessages }
                 </div>
 
-                <div className="typing-box">
-                    <input
-                        className="message-holder"
-                        placeholder="Type here..."
-                        value={ this.state.messageText }
-                        onChange={ this.keyEntered }
-                    >
-                    </input>
-                    <div className='send-button' onClick={ this.sendButtonClicked }>
-                        <div className='send-shape'></div>
-                    </div>
-                </div>
+                {
+                    this.props.currentChat == null ? (<></>) :
+                    (
+                        <div className="typing-box">
+                            <input
+                                className="message-holder"
+                                placeholder="Type here..."
+                                value={ this.state.messageText }
+                                onChange={ this.keyEntered }
+                            >
+                            </input>
+                            <div className='send-button' onClick={ this.sendButtonClicked }>
+                                <div className='send-shape'></div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         )
     }
