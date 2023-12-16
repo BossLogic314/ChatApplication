@@ -3,12 +3,13 @@ import ReactDOM from "react-dom/client";
 import Commons from "../Commons";
 import ChatsWindow from "./ChatsWindow";
 import MessagesWindow from './MessagesWindow';
-import '../Styles/chat-page.css';
 import { Client } from '@stomp/stompjs';
 import CreateGroupChatPopUp from "./CreateGroupChatPopUp";
 import UserProfilePopUp from './UserProfilePopUp';
 import DirectVideoCall from "./DirectVideoCall";
 import ChatProfilePopUp from './ChatProfilePopUp';
+import '../Styles/chat-page.css';
+import logo from '../logo.png';
 
 export default class ChatPage extends React.Component {
 
@@ -19,6 +20,7 @@ export default class ChatPage extends React.Component {
             currentUser: null,
             displayPictureArrayBufferOfCurrentUser: [],
             currentChat: null,
+            currentVideoCallChat: null,
             chats: [],
             displayPictureArrayBuffers: [],
             readMessages: [],
@@ -64,7 +66,7 @@ export default class ChatPage extends React.Component {
 
     componentDidMount() {
         // Display all the chats
-        this.searchChats();
+        this.searchChats(null, true);
 
         // Getting the array buffer of the user's display picture
         this.getDisplayPictureArrayBufferOfCurrentUser();
@@ -113,7 +115,7 @@ export default class ChatPage extends React.Component {
 
         // If the chat does not exist in the list displayed to the user, there is nothing to do
         if (index == -1) {
-            return;
+            return chats;
         }
 
         const newChats = chats.map((element) => element);
@@ -162,7 +164,7 @@ export default class ChatPage extends React.Component {
 
         // If the chat does not exist in the list displayed to the user, there is nothing to do
         if (index == -1) {
-            return;
+            return chats;
         }
 
         const newChats = chats.map((element) => element);
@@ -287,7 +289,24 @@ export default class ChatPage extends React.Component {
         }
         // If the else block is absent, it might get executed sometimes when React takes some time to re-render
         else {
-            this.setState({ readMessages: readMessages, unreadMessages: unreadMessages, currentChat: chat });
+
+            // Marking the currentChat attribute in the newly clicked chat
+            var newChats = this.state.chats.map((element) => element);
+            const len = newChats.length;
+            for (var i = 0; i < len; ++i) {
+
+                // Chat to be removed as the current chat
+                if (newChats[i].chatName == this.state.currentChat) {
+                    newChats[i].isCurrentChat = false;
+                }
+
+                // Chat to be marked as the current chat
+                if (newChats[i].chatName == chat) {
+                    newChats[i].isCurrentChat = true;
+                }
+            }
+
+            this.setState({ chats: newChats, readMessages: readMessages, unreadMessages: unreadMessages, currentChat: chat });
         }
     }
 
@@ -421,7 +440,7 @@ export default class ChatPage extends React.Component {
         return result;
     }
 
-    searchChats() {
+    searchChats(event, clickFirstChat=false) {
         const startString = document.getElementsByClassName('chat-search')[0].value;
 
         const args = [
@@ -457,6 +476,7 @@ export default class ChatPage extends React.Component {
                     numberOfUnreadMessages: numberOfUnreadMessagesFromEachChat[index],
                     latestMessageTime: latestMessageTimeFromEachChat[index],
                     groupChatParticipants: groupChatParticipantsOfEachChat[index],
+                    isCurrentChat: false,
                 }
             });
 
@@ -465,11 +485,15 @@ export default class ChatPage extends React.Component {
                 return element2.latestMessageTime - element1.latestMessageTime;
             });
 
-            this.setState({
-                chats: chats,
+            this.setState({ chats: chats,
                 numberOfUnreadMessagesFromEachChat: numberOfUnreadMessagesFromEachChat,
-                displayPictureArrayBuffers: displayPictureArrayBuffers,
-            });
+                displayPictureArrayBuffers: displayPictureArrayBuffers, },
+                () => {
+                    if ( clickFirstChat && this.state.chats.length > 0) {
+                        this.chatClicked(this.state.chats[0].chatName, false);
+                    }
+                }
+            );
         }
     }
 
@@ -548,7 +572,7 @@ export default class ChatPage extends React.Component {
     }
 
     videoCallButtonClicked(chat) {
-        this.setState({ displayVideoCallPage: true, currentChat: chat });
+        this.setState({ displayVideoCallPage: true, currentVideoCallChat: chat });
     }
 
     displayPictureClicked(chatName) {
@@ -583,7 +607,7 @@ export default class ChatPage extends React.Component {
         return(
             <div className="chat-page">
                 <div className="nav-bar">
-                    <div className="logo"></div>
+                    <img className="logo" src={ logo }></img>
                     <div className="options-button-box">
                         <div className="options-button" onClick={ this.optionsButtonClicked }>
                             Options
@@ -638,7 +662,7 @@ export default class ChatPage extends React.Component {
                 < DirectVideoCall
                     displayVideoCallPage={ this.state.displayVideoCallPage }
                     currentUser={ this.state.currentUser }
-                    currentChat={ this.state.currentChat }
+                    currentVideoCallChat={ this.state.currentVideoCallChat }
                 />
             </div>
         )

@@ -35,10 +35,10 @@
 }
 
 .create-group-chat-button {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .create-group-chat-button:hover {
     cursor: pointer;
-    transform: scale(1.125);
+    transform: scale(1.25);
 }

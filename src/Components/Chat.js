@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Commons from '../Commons';
 import '../Styles/chat.css';
+import video_call from '../video_call.png'
 
 export default class Chat extends React.Component {
 
@@ -30,15 +31,18 @@ export default class Chat extends React.Component {
     }
 
     render() {
+        const className = this.props.isCurrentChat ? 'currentChat' : 'chat';
         return (
-            <div className='chat' onClick={ this.chatClicked }>
+            <div className={ className } onClick={ this.chatClicked }>
 
                 <img className='displayPicture'
                     src={ Commons.getDisplayPictureURL(this.props.displayPictureArrayBuffer) }
                     onClick={ this.displayPictureClicked }>
                 </img>
                 <div className='chatName'> { this.props.chatName } </div>
-                <div className='video-call-button' onClick={ this.videoCallButtonClicked }>Call</div>
+                <div className='video-call-button' onClick={ this.videoCallButtonClicked }>
+                    <img className='video-call-image' src={ video_call }></img>
+                </div>
                 {
                     this.props.numberOfUnreadMessages != 0 ?
                         <div className='numberOfUnreadMessages'>

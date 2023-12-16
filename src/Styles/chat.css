@@ -1,4 +1,4 @@
-.chat {
+.chat, .currentChat {
     height: 50px;
     width: 100%;
 
@@ -14,9 +14,13 @@
     border: 1px solid yellow;
 }
 
-.chat:hover {
+.currentChat {
+    background-color: rgb(216, 212, 212);
+}
+
+.chat:hover, .currentChat:hover {
     cursor: pointer;
-    background-color: rgb(231, 221, 221);
+    background-color: rgb(216, 212, 212);
 
     transform: scale(1.01);
 }
@@ -33,19 +37,26 @@
 }
 
 .chatName {
+    font-size: 20px;
     margin-left: 5px;
 
     /*border: 2px solid black;*/
 }
 
 .video-call-button {
-    font-size: 17px;
     margin-left: auto;
+    margin-right: 5px;
+
+    /*border: 2px solid red;*/
+}
+
+.video-call-image {
+    width: 100%;
+    height: 100%;
 }
 
 .numberOfUnreadMessages {
-    margin-left: auto;
-    margin-right: 15px;
+    margin-left: 5px;
 
     color: rgb(220, 50, 50);
 }

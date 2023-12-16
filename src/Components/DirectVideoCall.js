@@ -80,7 +80,7 @@ export default class DirectVideoCall extends React.Component {
         }
 
         this.stompClient.publish({
-            destination: `/topic/direct-video-call-${this.props.currentChat}`,
+            destination: `/topic/direct-video-call-${this.props.currentVideoCallChat}`,
             headers: {fromUser: this.props.currentUser, type: type, sdp: sdp},
         });
     }
@@ -94,7 +94,7 @@ export default class DirectVideoCall extends React.Component {
             this.startConnection.addTrack(track, this.localStream);
         });
         this.startConnection.ontrack = (event) => {
-            console.log(`Got tracks from ${this.props.currentChat}`);
+            console.log(`Got tracks from ${this.props.currentVideoCallChat}`);
             event.streams[0].getTracks().forEach((track) => {
                 this.remoteStream.addTrack(track);
             });
@@ -115,7 +115,7 @@ export default class DirectVideoCall extends React.Component {
             this.acceptConnection.addTrack(track, this.localStream);
         });
         this.acceptConnection.ontrack = (event) => {
-            console.log(`In accept, Got tracks from ${this.props.currentChat}`);
+            console.log(`In accept, Got tracks from ${this.props.currentVideoCallChat}`);
             event.streams[0].getTracks().forEach((track) => {
                 this.remoteStream.addTrack(track);
             });

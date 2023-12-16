@@ -21,6 +21,7 @@ export default class ChatsWindow extends React.Component {
                     chatClicked={ this.props.chatClicked }
                     videoCallButtonClicked={ this.props.videoCallButtonClicked }
                     displayPictureClicked={ this.props.displayPictureClicked }
+                    isCurrentChat={ element.isCurrentChat }
                 />
         );
 
@@ -32,9 +33,9 @@ export default class ChatsWindow extends React.Component {
                 </div>
 
                 <div className='create-group-chat'>
-                    <button className='create-group-chat-button' onClick={ this.props.createGroupChatPopUpClicked }>
+                    <div className='create-group-chat-button' onClick={ this.props.createGroupChatPopUpClicked }>
                         New group
-                    </button>
+                    </div>
                 </div>
             </div>
         )
