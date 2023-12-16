@@ -60,6 +60,37 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public Boolean isGroupChat(String chat) {
+		
+		// The list should ideally contain only one element
+		ArrayList<Boolean> list = (ArrayList<Boolean>) userRepository.isGroupChat(chat);
+		
+		// Looping anyway
+		for (Boolean element : list) {
+			if (element)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public Iterable<ArrayList<String>> getGroupChatParticipantsOfEachChat(String chatNames[]) {
+		
+		ArrayList<ArrayList<String>> groupChatParticipantsList = new ArrayList<>();
+		for (String chatName: chatNames) {
+			if (!isGroupChat(chatName)) {
+				groupChatParticipantsList.add(null);
+				continue;
+			}
+			ArrayList<String> participants = (ArrayList<String>) getGroupChatParticipants(chatName);
+			groupChatParticipantsList.add(participants);
+		}
+		
+		return groupChatParticipantsList;
+	}
+	
+	@Override
 	public Integer getNumberOfParticipantsInGroupChat(String name) {
 		// This list must contain only one element
 		ArrayList<Integer> numberOfParticipantsList =
@@ -131,14 +162,14 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]) {
+	public Boolean newDisplayPictureSelected(String chat, Integer displayPictureArrayBuffer[]) {
 		ArrayList<Integer> displayPictureArrayBufferList = new ArrayList<>();
 		
 		int len = displayPictureArrayBuffer.length;
 		for (int i = 0; i < len; ++i)
 			displayPictureArrayBufferList.add(displayPictureArrayBuffer[i]);
 		
-		userRepository.newDisplayPictureSelected(user, displayPictureArrayBufferList);
+		userRepository.newDisplayPictureSelected(chat, displayPictureArrayBufferList);
 		return true;
 	}
 	

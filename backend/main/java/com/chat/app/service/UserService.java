@@ -1,5 +1,7 @@
 package com.chat.app.service;
 
+import java.util.ArrayList;
+
 import com.chat.app.model.Chat;
 
 public interface UserService {
@@ -12,6 +14,10 @@ public interface UserService {
 	
 	public void createGroupChat(String name, String participants[]);
 	
+	public Boolean isGroupChat(String chat);
+	
+	public Iterable<ArrayList<String>> getGroupChatParticipantsOfEachChat(String chatNames[]);
+	
 	public Integer getNumberOfParticipantsInGroupChat(String name);
 	
 	public Iterable<String> getGroupChatParticipants(String name);
@@ -20,7 +26,7 @@ public interface UserService {
 	
 	public Iterable<Integer> getDisplayPictureArrayBufferOfUser(String username);
 	
-	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[]);
+	public Boolean newDisplayPictureSelected(String chat, Integer displayPictureArrayBuffer[]);
 	
 	public Boolean isNameUnique(String name);
 	

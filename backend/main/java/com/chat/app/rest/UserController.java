@@ -1,5 +1,7 @@
 package com.chat.app.rest;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +75,16 @@ public class UserController {
 		return true;
 	}
 	
+	@GetMapping("/get-group-chat-participants-from-each-chat")
+	public Iterable<ArrayList<String>> getGroupChatParticipantsFromEachChat(String chatNames[], HttpServletRequest request) {
+		
+		// If the user has to login
+		if (cookieVerifyService.verifyCookie(request) == null)
+			return null;
+		
+		return userService.getGroupChatParticipantsOfEachChat(chatNames);
+	}
+	
 	@GetMapping("/get-group-chat-participants")
 	public Iterable<String> getGroupChatParticipants(String name, HttpServletRequest request) {
 		
@@ -94,13 +106,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/new-display-picture-selected")
-	public Boolean newDisplayPictureSelected(String user, Integer displayPictureArrayBuffer[], HttpServletRequest request) {
+	public Boolean newDisplayPictureSelected(String chat, Integer displayPictureArrayBuffer[], HttpServletRequest request) {
 		
 		// If the user has to login
 		if (cookieVerifyService.verifyCookie(request) == null)
 			return null;
 		
-		return userService.newDisplayPictureSelected(user, displayPictureArrayBuffer);
+		return userService.newDisplayPictureSelected(chat, displayPictureArrayBuffer);
 	}
 	
 	@GetMapping("/is-name-unique")

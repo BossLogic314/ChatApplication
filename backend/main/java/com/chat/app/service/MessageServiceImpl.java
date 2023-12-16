@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.chat.app.model.Message;
 import com.chat.app.repository.MessageRepository;
-import com.chat.app.repository.UserRepository;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -17,29 +16,12 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Autowired
 	private MessageRepository messageRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	public Boolean isGroupChat(String chat) {
-		
-		// The list should ideally contain only one element
-		ArrayList<Boolean> list = (ArrayList<Boolean>) userRepository.isGroupChat(chat);
-		
-		// Looping anyway
-		for (Boolean element : list) {
-			if (element)
-				return true;
-		}
-		
-		return false;
-	}
 
 	@Override
 	public Iterable<Message> getReadMessagesFromChat(String user, String chat) {
 		
 		// If not a group chat
-		if (!isGroupChat(chat))
+		if (!userService.isGroupChat(chat))
 			return messageRepository.getReadMessagesFromUser(user, chat);
 		
 		// If a group chat
@@ -51,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
 	public Iterable<Message> getUnreadMessagesFromChat(String user, String chat) {
 		
 		// If not a group chat
-		if (!isGroupChat(chat))
+		if (!userService.isGroupChat(chat))
 			return messageRepository.getUnreadMessagesFromUser(user, chat);
 		
 		// If a group chat
@@ -64,7 +46,7 @@ public class MessageServiceImpl implements MessageService {
 			Integer year, Integer month, Integer date, Integer hours,
 			Integer minutes, Integer seconds, Integer milliseconds) {
 		
-		Boolean isGroupChat = isGroupChat(chat);
+		Boolean isGroupChat = userService.isGroupChat(chat);
 		int numberOfParticipants = isGroupChat ?
 				userService.getNumberOfParticipantsInGroupChat(chat) : 2;
 		
@@ -99,7 +81,7 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public Boolean turnAllMessagesForUserIntoReadFromChat(String user, String chat) {
 		
-		if (!isGroupChat(chat))
+		if (!userService.isGroupChat(chat))
 			messageRepository.turnAllMessagesIntoReadFromUser(user, chat);
 		else {
 			Integer groupChatParticipantIndex = userService.getGroupChatParticipantIndex(user, chat);
@@ -115,7 +97,7 @@ public class MessageServiceImpl implements MessageService {
 		for (String chat : chats) {
 			
 			// Group chat
-			if (isGroupChat(chat)) {
+			if (userService.isGroupChat(chat)) {
 				int groupChatParticipantIndex = userService.getGroupChatParticipantIndex(user, chat);
 				listOfNumberOfUnreadMessages.add(
 						messageRepository.getNumberOfUnreadMessagesFromGroupChat(
